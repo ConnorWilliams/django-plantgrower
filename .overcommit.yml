@@ -35,3 +35,4 @@ PreCommit:
 PrePush:
  Pytest:
    enabled: true
+   required: false
