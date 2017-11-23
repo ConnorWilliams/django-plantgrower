@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Three-step guide to making model changes:
 #
@@ -10,22 +11,50 @@ from django.utils import timezone
 # 3. Run python manage.py migrate to apply those changes to the database.
 
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+class Grow(models.Model):
+    # The first element in each choices tuple is the actual value to be set on
+    # the model, and the second element is the human-readable name.
+    GROW_STAGES = (
+        (1, 'Germination'),
+        (2, 'Veg'),
+        (3, 'Flower'),
+        (4, 'Chop'),
+        (5, 'Cure'),
+        (6, 'Complete')
+    )
+    HOUR_VALIDATORS = [
+        MaxValueValidator(24),
+        MinValueValidator(0)
+    ]
+    strain = models.CharField(
+        max_length=100,
+    )
+    start_date = models.DateTimeField(
+        auto_now_add=True,
+    )
+    current_stage = models.CharField(
+        max_length=100,
+        choices=GROW_STAGES,
+        default=1,
+    )
+    veg_light_duration = models.IntegerField(validators=HOUR_VALIDATORS)
+    veg_dark_duration = models.IntegerField(validators=HOUR_VALIDATORS)
+    flower_light_duration = models.IntegerField(validators=HOUR_VALIDATORS)
+    flower_dark_duration = models.IntegerField(validators=HOUR_VALIDATORS)
+    last_light_switch = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     def __str__(self):
-        return self.question_text
+        return "{} started growing on {}".format(
+            self.strain,
+            self.start_date
+        )
 
-    def was_published_recently(self):
+    def started_recently(self):
         now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+        return now - datetime.timedelta(days=1) <= self.start_date <= now
 
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.choice_text
+    def grow_time(self):
+        now = timezone.now()
+        return now - self.start_date

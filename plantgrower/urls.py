@@ -6,22 +6,22 @@ app_name = 'plantgrower'
 urlpatterns = [
     url(
         r'^$',
-        views.IndexView.as_view(),
-        name='index'
+        views.Details.as_view(),
+        name='details'
     ),
     url(
-        r'^(?P<pk>[0-9]+)/$',
-        views.DetailView.as_view(),
-        name='detail'
+        r'^newgrow$',
+        views.new_grow,
+        name='newgrow'
     ),
-    url(
-        r'^(?P<pk>[0-9]+)/results/$',
-        views.ResultsView.as_view(),
-        name='results'
-    ),
-    url(
-        r'^(?P<question_id>[0-9]+)/vote/$',
-        views.vote,
-        name='vote'
-    ),
+    # url(
+    #     r'^/settings/$',
+    #     views.SettingsView.as_view(),
+    #     name='settings'
+    # ),
+    # url(
+    #     r'^/summary/$',
+    #     views.sumary,
+    #     name='summary'
+    # ),
 ]

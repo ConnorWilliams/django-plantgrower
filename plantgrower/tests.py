@@ -4,10 +4,10 @@ from django.utils import timezone
 from django.test import TestCase
 from django.shortcuts import reverse
 
-from .models import Question
+from .models import Grow
 
 
-def create_question(question_text, days):
+def create_grow(question_text, days):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
