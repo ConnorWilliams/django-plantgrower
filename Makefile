@@ -17,10 +17,10 @@ clean-build:
 	rm -rf *.egg-info
 
 lint:
-	flake8
+	flake8 flake8 --exclude= migrations/
 
 test: clean-pyc
-  py.test --verbose --color=yes $(TEST_PATH)
+	pytest --cov=plant_grower
 
 run:
 	python manage.py runserver

@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -60,10 +58,6 @@ class Grow(models.Model):
             self.strain,
             self.start_date
         )
-
-    def started_recently(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.start_date <= now
 
     def grow_time(self):
         now = timezone.now()

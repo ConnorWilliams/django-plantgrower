@@ -13,15 +13,5 @@ urlpatterns = [
         r'^newgrow$',
         views.new_grow,
         name='newgrow'
-    ),
-    # url(
-    #     r'^/settings/$',
-    #     views.SettingsView.as_view(),
-    #     name='settings'
-    # ),
-    # url(
-    #     r'^/summary/$',
-    #     views.sumary,
-    #     name='summary'
-    # ),
+    )
 ]
