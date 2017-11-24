@@ -15,12 +15,17 @@ class Grow(models.Model):
     # The first element in each choices tuple is the actual value to be set on
     # the model, and the second element is the human-readable name.
     GROW_STAGES = (
-        (1, 'Germination'),
-        (2, 'Veg'),
-        (3, 'Flower'),
-        (4, 'Chop'),
-        (5, 'Cure'),
-        (6, 'Complete')
+        ('1', 'Germination'),
+        ('2', 'Veg'),
+        ('3', 'Flower'),
+        ('4', 'Chop'),
+        ('5', 'Cure'),
+        ('6', 'Complete')
+    )
+    STATUSES = (
+        ('1', 'ACTIVE'),
+        ('2', 'COMPLETE'),
+        ('3', 'CANCELLED')
     )
     HOUR_VALIDATORS = [
         MaxValueValidator(24),
@@ -33,7 +38,7 @@ class Grow(models.Model):
         auto_now_add=True,
     )
     current_stage = models.CharField(
-        max_length=100,
+        max_length=20,
         choices=GROW_STAGES,
         default=1,
     )
@@ -43,6 +48,11 @@ class Grow(models.Model):
     flower_dark_duration = models.IntegerField(validators=HOUR_VALIDATORS)
     last_light_switch = models.DateTimeField(
         auto_now_add=True,
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUSES,
+        default=1,
     )
 
     def __str__(self):

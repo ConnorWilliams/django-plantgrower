@@ -6,8 +6,8 @@ app_name = 'plantgrower'
 urlpatterns = [
     url(
         r'^$',
-        views.Details.as_view(),
-        name='details'
+        views.index,
+        name='index'
     ),
     url(
         r'^newgrow$',

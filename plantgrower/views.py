@@ -1,42 +1,54 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, reverse
+import logging
+
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
 from .models import Grow
-from django.views import generic
-from django.utils import timezone
 from .forms import GrowForm
 
+logger = logging.getLogger(__name__)
 
+
+def index(request):
+    if Grow.objects.filter(status='1'):
+        logger.info("Active grow found")
+        return all_grows(request)
+    else:
+        logger.info("No active grows")
+        return new_grow(request)
 
 
 def new_grow(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
+        logger.info("Received POST")
         form = GrowForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
             form.save()
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/')
-
-    # if a GET (or any other method) we'll create a blank form
+            return HttpResponseRedirect('/plantgrower/')
     else:
-        form = GrowForm()
+        logger.info("No POST")
+        if not Grow.objects.filter(status='1'):
+            form = GrowForm()
+        else:
+            return HttpResponseRedirect('/plantgrower/')
 
-    return render(request, 'plantgrower/index.html', {'form': form})
+    return render(request, 'plantgrower/newgrow.html', {'form': form})
 
 
-class Details(generic.DetailView):
-    model = Grow
-    template_name = 'plantgrower/detail.html'
+def all_grows(request):
+    grows = Grow.objects.all()
+    output = '</br>'.join([str(grow) for grow in grows])
+    return HttpResponse(output)
 
-    def get_queryset(self):
-            """
-            Excludes any questions that aren't published yet.
-            """
-            return Grow.objects.all()
+
+# class Details(generic.DetailView):
+#     model = Grow
+#     template_name = 'plantgrower/detail.html'
+#
+#     def get_queryset(self):
+#             """
+#             Excludes any questions that aren't published yet.
+#             """
+#             return Grow.objects.all()
 #
 #
 # class ResultsView(generic.DetailView):

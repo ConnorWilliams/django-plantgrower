@@ -6,5 +6,10 @@ from .models import Grow
 class GrowForm(ModelForm):
     class Meta:
         model = Grow
-        fields = '__all__'
-        # fields = ['strain', 'current_stage']
+        fields = [
+            'strain',
+            'veg_light_duration',
+            'veg_dark_duration',
+            'flower_light_duration',
+            'flower_dark_duration'
+        ]
