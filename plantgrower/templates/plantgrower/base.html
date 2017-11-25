@@ -2,13 +2,22 @@
 
 <html>
   <head>
+    <title>Plant Grower</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'plantgrower/css/bootstrap.min.css' %}" />
+    {% block head %}
+    {% endblock %}
   </head>
 
   <body>
-    {% block content %}
-    {% endblock %}
+    <div class="container-fluid">
+      {% block content %}
+      {% endblock %}
 
-    <script src="{% static 'plantgrower/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'plantgrower/js/bootstrap.min.js' %}"></script>
+      <script src="https://code.jquery.com/jquery.js"></script>
+      {% block scripts %}
+      {% endblock %}
+    </div>
   </body>
 </html>
