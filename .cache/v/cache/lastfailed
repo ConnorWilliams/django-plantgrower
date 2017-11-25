@@ -1,1 +1,3 @@
-{}
+{
+  "plantgrower/tests.py::TestGrowModel::()::test_grow_time": true
+}

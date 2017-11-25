@@ -17,10 +17,10 @@ clean-build:
 	rm -rf *.egg-info
 
 lint:
-	flake8 flake8 --exclude= migrations/
+	flake8 . --exclude migrations/*,plantgrower/migrations/*
 
 test: clean-pyc
-	pytest --cov=plant_grower
+	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower
 
 run:
 	python manage.py runserver

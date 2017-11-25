@@ -59,6 +59,7 @@ class Grow(models.Model):
             self.start_date
         )
 
+    @property
     def grow_time(self):
         now = timezone.now()
         return now - self.start_date

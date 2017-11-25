@@ -21,3 +21,8 @@ class TestGrowModel(object):
     def test_new_grow_is_active(self):
         grow = create_grow('', 1, 1, 1, 1)
         assert grow.status == 1
+
+    def test_grow_string(self):
+        strain_name = 'My strain'
+        grow = create_grow(strain_name, 1, 1, 1, 1)
+        assert "{} started growing on".format(strain_name) in str(grow)

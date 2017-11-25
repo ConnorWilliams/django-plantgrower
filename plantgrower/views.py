@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def index(request):
     if Grow.objects.filter(status='1'):
         logger.info("Active grow found")
-        return all_grows(request)
+        return current_grow(request)
     else:
         logger.info("No active grows")
         return new_grow(request)
@@ -34,12 +34,17 @@ def new_grow(request):
     return render(request, 'plantgrower/newgrow.html', {'form': form})
 
 
+def current_grow(request):
+    current_grow = Grow.objects.filter(status='1')[0]
+    attributes = vars(current_grow)
+    output = '</br>'.join("%s: %s" % item for item in attributes.items())
+    return HttpResponse(output)
+
+
 def all_grows(request):
     grows = Grow.objects.all()
     output = '</br>'.join([str(grow) for grow in grows])
     return HttpResponse(output)
-
-
 # class Details(generic.DetailView):
 #     model = Grow
 #     template_name = 'plantgrower/detail.html'
