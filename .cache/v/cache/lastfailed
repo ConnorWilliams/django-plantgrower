@@ -1,3 +1,5 @@
 {
-  "plantgrower/tests.py::TestGrowModel::()::test_grow_time": true
+  "plantgrower/test_views.py::TestIndexView::()::test_future_question": true,
+  "plantgrower/test_views.py::TestIndexView::()::test_future_question_and_past_question": true,
+  "plantgrower/test_views.py::TestIndexView::()::test_two_past_questions": true
 }

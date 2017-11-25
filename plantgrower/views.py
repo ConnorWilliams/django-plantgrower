@@ -29,6 +29,7 @@ def new_grow(request):
         if not Grow.objects.filter(status='1'):
             form = GrowForm()
         else:
+            logger.info("Showing active grow")
             return HttpResponseRedirect('/plantgrower/')
 
     return render(request, 'plantgrower/newgrow.html', {'form': form})
@@ -45,22 +46,7 @@ def all_grows(request):
     grows = Grow.objects.all()
     output = '</br>'.join([str(grow) for grow in grows])
     return HttpResponse(output)
-# class Details(generic.DetailView):
-#     model = Grow
-#     template_name = 'plantgrower/detail.html'
-#
-#     def get_queryset(self):
-#             """
-#             Excludes any questions that aren't published yet.
-#             """
-#             return Grow.objects.all()
-#
-#
-# class ResultsView(generic.DetailView):
-#     model = Question
-#     template_name = 'plantgrower/results.html'
-#
-#
+
 # def vote(request, question_id):
 #     question = get_object_or_404(Question, pk=question_id)
 #     try:

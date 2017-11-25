@@ -20,7 +20,7 @@ lint:
 	flake8 . --exclude migrations/*,plantgrower/migrations/*
 
 test: clean-pyc
-	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower
+	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower -vv
 
 run:
 	python manage.py runserver

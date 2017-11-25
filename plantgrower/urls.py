@@ -13,5 +13,10 @@ urlpatterns = [
         r'^newgrow$',
         views.new_grow,
         name='newgrow'
+    ),
+    url(
+        r'^allgrows$',
+        views.all_grows,
+        name='allgrows'
     )
 ]

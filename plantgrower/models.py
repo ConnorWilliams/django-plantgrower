@@ -34,6 +34,7 @@ class Grow(models.Model):
     )
     start_date = models.DateTimeField(
         auto_now_add=True,
+        # readonly=True
     )
     current_stage = models.CharField(
         max_length=20,
