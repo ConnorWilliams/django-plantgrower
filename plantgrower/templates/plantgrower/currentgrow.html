@@ -1,0 +1,10 @@
+<h1>{{ grow.strain }}</h1>
+{{ grow.start_date }}</br>
+{{ grow.current_stage }}</br>
+{{ grow.veg_light_duration }}</br>
+{{ grow.veg_dark_duration }}</br>
+{{ grow.flower_light_duration }}</br>
+{{ grow.flower_dark_duration }}</br>
+{{ grow.last_light_switch }}</br>
+{{ grow.start_date }}</br>
+<a href="{% url 'plantgrower:editgrow' grow.id %}" method="post">Edit</a>

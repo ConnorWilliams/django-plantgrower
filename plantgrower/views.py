@@ -1,7 +1,7 @@
 import logging
 
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Grow
 from .forms import GrowForm
 
@@ -36,10 +36,26 @@ def new_grow(request):
 
 
 def current_grow(request):
-    current_grow = Grow.objects.filter(status='1')[0]
-    attributes = vars(current_grow)
-    output = '</br>'.join("%s: %s" % item for item in attributes.items())
-    return HttpResponse(output)
+    grow = Grow.objects.filter(status='1')[0]
+    return render(request, 'plantgrower/currentgrow.html', {'grow': grow})
+
+
+def edit_grow(request, grow_id):
+    logger.info("Editing")
+    grow = get_object_or_404(Grow, pk=grow_id)
+    if request.method == 'POST':
+        logger.info("Received POST")
+        form = GrowForm(request.POST, instance=grow)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/plantgrower/')
+    else:
+        logger.info("No POST")
+        form = GrowForm(instance=grow)
+
+    return render(
+        request, 'plantgrower/editgrow.html', {'form': form, 'grow': grow}
+    )
 
 
 def all_grows(request):
