@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from .gpio import lights_on
 # Three-step guide to making model changes:
 #
 # 1. Change your models (in models.py).
@@ -34,18 +34,20 @@ class Grow(models.Model):
     )
     start_date = models.DateTimeField(
         auto_now_add=True,
-        # readonly=True
     )
     current_stage = models.CharField(
         max_length=20,
         choices=GROW_STAGES,
         default=1,
     )
+    stage_switch_date = models.DateTimeField(
+        auto_now_add=True,
+    )
     veg_light_duration = models.IntegerField(validators=HOUR_VALIDATORS)
     veg_dark_duration = models.IntegerField(validators=HOUR_VALIDATORS)
     flower_light_duration = models.IntegerField(validators=HOUR_VALIDATORS)
     flower_dark_duration = models.IntegerField(validators=HOUR_VALIDATORS)
-    last_light_switch = models.DateTimeField(
+    light_switch_date = models.DateTimeField(
         auto_now_add=True,
     )
     status = models.CharField(
@@ -64,3 +66,32 @@ class Grow(models.Model):
     def grow_time(self):
         now = timezone.now()
         return now - self.start_date
+
+    @property
+    def stage_time(self):
+        now = timezone.now()
+        return now - self.stage_switch_date
+
+    @property
+    def light_duration(self):
+        if self.current_stage == 2:
+            return self.veg_light_duration
+        elif self.current_stage == 3:
+            return self.flower_light_duration
+        else:
+            return 0
+
+    @property
+    def switch_countdown(self):
+        if self.current_stage == 2:
+            if lights_on():
+                return self.veg_light_duration - self.light_switch_date
+            else:
+                return self.veg_dark_duration - self.light_switch_date
+        elif self.current_stage == 3:
+            if lights_on():
+                return self.flower_light_duration - self.light_switch_date
+            else:
+                return self.flower_dark_duration - self.light_switch_date
+        else:
+            return 'a different grow phase'

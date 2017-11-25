@@ -15,6 +15,11 @@ urlpatterns = [
         name='newgrow'
     ),
     url(
+        r'^currentgrow$',
+        views.CurrentGrow.as_view(),
+        name='currentgrow'
+    ),
+    url(
         r'^editgrow/(?P<grow_id>[0-9]+)/$',
         views.EditGrow.as_view(),
         name='editgrow'

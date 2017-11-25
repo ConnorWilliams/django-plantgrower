@@ -31,8 +31,8 @@ class TestIndexView(object):
         """
         self.client = Client()
         response = self.client.get(reverse('plantgrower:index'))
-        assert response.status_code == 200
-        assert "Strain:" in str(response._container)
+        assert response.status_code == 302
+        assert '/plantgrower/newgrow' in response._headers['location']
 
     @pytest.mark.django_db
     def test_post(self):

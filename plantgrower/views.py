@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from .models import Grow
 from .forms import GrowForm
+from .gpio import lights_on, fans_on
 
 logger = logging.getLogger(__name__)
 
@@ -13,10 +14,10 @@ class Index(View):
     def get(self, request):
         if Grow.objects.filter(status='1'):
             logger.info("Active grow found")
-            return CurrentGrow()
+            return HttpResponseRedirect('/plantgrower/currentgrow')
         else:
             logger.info("No active grows")
-            return NewGrow()
+            return HttpResponseRedirect('/plantgrower/newgrow')
 
 
 class NewGrow(View):
@@ -39,20 +40,23 @@ class NewGrow(View):
 
 class CurrentGrow(View):
     def get(self, request):
-        print(request)
         grow = Grow.objects.filter(status='1')[0]
-        grow = Grow.objects.get(pk=grow.id).__dict__
-        print("request")
-        print(type(request))
-        print("end")
+        lights = {
+            'on_duration': grow.light_duration,
+            'off_duration': 24 - grow.light_duration,
+            'status': 'ON' if lights_on() else 'OFF',
+            'switch_countdown': grow.switch_countdown
+        }
+        fans = {
+            'status': 'ON' if fans_on() else 'OFF',
+        }
         return render(
             request,
             'plantgrower/currentgrow.html',
             {
                 'grow': grow,
-                # 'lights': lights,
-                # 'fans': fans,
-
+                'lights': lights,
+                'fans': fans,
             }
         )
 

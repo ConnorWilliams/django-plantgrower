@@ -10,14 +10,13 @@
   </head>
 
   <body>
-    <div class="container-fluid">
+    <div class="container">
       {% block content %}
       {% endblock %}
-
-      <script src="{% static 'plantgrower/js/bootstrap.min.js' %}"></script>
-      <script src="https://code.jquery.com/jquery.js"></script>
-      {% block scripts %}
-      {% endblock %}
     </div>
+    <script src="{% static 'plantgrower/js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    {% block scripts %}
+    {% endblock %}
   </body>
 </html>
