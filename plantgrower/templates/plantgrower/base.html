@@ -1,0 +1,14 @@
+{% load static %}
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'plantgrower/css/bootstrap.min.css' %}" />
+  </head>
+
+  <body>
+    {% block content %}
+    {% endblock %}
+
+    <script src="{% static 'plantgrower/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

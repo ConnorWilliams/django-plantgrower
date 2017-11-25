@@ -1,5 +1,9 @@
-<form action='{% url 'plantgrower:editgrow' grow.id %}' method="post">
+{% extends "plantgrower/base.html" %}
+
+{% block content %}
+  <form action='{% url 'plantgrower:editgrow' grow.id %}' method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Save" />
-</form>
+  </form>
+{% endblock %}
