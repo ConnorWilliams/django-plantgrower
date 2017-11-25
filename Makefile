@@ -5,6 +5,7 @@ TEST_PATH=./
 clean:
 	make clean-pyc
 	make clean-build
+	make flush
 
 clean-pyc:
 	find . -name '*.pyc' -delete
@@ -15,6 +16,9 @@ clean-build:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info
+
+flush:
+	python manage.py flush --noinput
 
 lint:
 	flake8 . --exclude migrations/*,plantgrower/migrations/*
