@@ -7,7 +7,7 @@
   <div class="col">
     <h1>Summary</h1>
     <h2>{{ grow.strain }}</h2>
-    <p>{{ grow.get_current_stage_display }} for {{ grow.stage_time }}.</p>
+    <p>{{ grow.get_current_stage_display }} for </p><p id='stage_time'></p>
     <p>Started on {{ grow.start_date }} and has been growing for {{ grow.grow_time }}.</p>
 
     <h3>Lights</h3>
@@ -33,7 +33,4 @@
 
 {% block scripts %}
   <script type="text/javascript" src='{% static "plantgrower/js/sensor.js" %}'></script>
-  <script>
-    myfunc();
-  </script>
 {% endblock %}
