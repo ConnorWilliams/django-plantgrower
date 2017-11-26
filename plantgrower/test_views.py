@@ -88,7 +88,7 @@ class TestEditGrowView(object):
             reverse('plantgrower:editgrow', args=[grow.id])
         )
         assert response.status_code == 200
-        assert "Strain:" in str(response._container)
+        assert "Strain" in str(response._container)
 
     @pytest.mark.django_db
     def test_editgrow_post(self):

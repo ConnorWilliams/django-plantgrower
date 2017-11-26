@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'channels',
+    'bootstrap3',
     'plantgrower.apps.PlantgrowerConfig',
     'django.contrib.admin',
     'django.contrib.auth',

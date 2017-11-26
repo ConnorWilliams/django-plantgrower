@@ -1,26 +1,31 @@
 {% extends "plantgrower/base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
-<div class="col-8">
-  <h1>Summary</h1>
-  <h2>{{ grow.strain }}</h2>
-  <p>{{ grow.get_current_stage_display }} for {{ grow.stage_time }}.</p>
-  <p>Started on {{ grow.start_date }} and has been growing for {{ grow.grow_time }}.</p>
+<div class="row">
+  <div class="col">
+    <h1>Summary</h1>
+    <h2>{{ grow.strain }}</h2>
+    <p>{{ grow.get_current_stage_display }} for {{ grow.stage_time }}.</p>
+    <p>Started on {{ grow.start_date }} and has been growing for {{ grow.grow_time }}.</p>
 
-  <h3>Lights</h3>
-  <p>Light schedule is {{ lights.on_duration }}H light and {{ lights.off_duration }}H dark per day.</p>
-  <p>Lights are currently {{ lights.status }}.</p>
-  <p>Lights will change in {{ lights.switch_countdown }}.</p>
+    <h3>Lights</h3>
+    <p>Light schedule is {{ lights.on_duration }}H light and {{ lights.off_duration }}H dark per day.</p>
+    <p>Lights are currently {{ lights.status }}.</p>
+    <p>Lights will change in {{ lights.switch_countdown }}.</p>
 
-  <h3>Fans</h3>
-  <p>Fans are currently {{ fans.status }}.</p>
+    <h3>Fans</h3>
+    <p>Fans are currently {{ fans.status }}.</p>
 
-  <a href="{% url 'plantgrower:editgrow' grow.id %}" method="post">
-    <button type="button" class="btn btn-warning">Edit Grow</button>
-  </a>
-  <button type="button" class="btn btn-success">Next Stage</button>
-</div>
-<div class="col-4">
-  <h1>Graphs</h1>
+    {% buttons %}
+      <a href="{% url 'plantgrower:editgrow' grow.id %}" method="post">
+        <button type="button" class="btn btn-warning">Edit Grow</button>
+      </a>
+      <button type="button" class="btn btn-success">Next Stage</button>
+    {% endbuttons %}
+  </div>
+  <div class="col">
+    <h1>Graphs</h1>
+  </div>
 </div>
 {% endblock %}
