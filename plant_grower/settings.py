@@ -25,8 +25,7 @@ SECRET_KEY = 'e%9b8a%f6s6lef6+mr6#x%=vr%x=&9tseg_9)ws4+-h)7ywz6#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['plantgrower', 'localhost', '127.0.0.1']
 
 # Application definition
 
