@@ -28,7 +28,7 @@ SECRET_KEY = 'e%9b8a%f6s6lef6+mr6#x%=vr%x=&9tseg_9)ws4+-h)7ywz6#'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['192.1681.1.144', 'plantgrower', 'localhost', gethostname(), gethostbyname(gethostname())]
+ALLOWED_HOSTS = ['192.168.1.144', 'plantgrower', 'localhost', gethostname(), gethostbyname(gethostname())]
 
 # Application definition
 
