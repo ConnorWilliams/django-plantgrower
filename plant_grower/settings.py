@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['plantgrower', 'localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'channels',
     'bootstrap3',
-    'plantgrower.apps.PlantgrowerConfig',
+    'plantgrower',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,17 +122,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATIC_URL = '/static/'
+STATIC_URL = '/static/plantgrower/'
 STATIC_ROOT = '/var/www/plantgrower/static'
 
-# use_websockets = True
+use_websockets = True
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "asgi_redis.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("localhost", 6379)],
-#         },
-#         "ROUTING": "plantgrower.routing.channel_routing",
-#     },
-# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "plantgrower.routing.channel_routing",
+    },
+}
