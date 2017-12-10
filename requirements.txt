@@ -1,0 +1,4 @@
+django
+channels
+django-bootstrap3
+asgi_redis
