@@ -26,5 +26,15 @@ lint:
 test: clean-pyc
 	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower -vv
 
-run:
+run-dev:
 	python manage.py runserver
+
+run:
+	python manage.py runworker &
+	python manage.py update_grow &
+	daphne -b 0.0.0.0 -p 8001 plant_grower.asgi:channel_layer &
+
+kill:
+	for pid in `ps -l | grep python | awk ' {print $$4} '` ; do kill $$pid ; done
+	for pid in `ps -l | grep daphne | awk ' {print $$4} '` ; do kill $$pid ; done
+
