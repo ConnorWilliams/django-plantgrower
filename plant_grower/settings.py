@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'channels',
     'bootstrap3',
     'plantgrower',
+    'dashing',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
