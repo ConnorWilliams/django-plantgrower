@@ -15,10 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from dashing.utils import router
 
 urlpatterns = [
     url(r'^plantgrower/', include('plantgrower.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^dashboard/', include(router.urls)),
 ]

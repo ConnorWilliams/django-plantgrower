@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from socket import gethostname, gethostbyname 
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,21 +27,23 @@ SECRET_KEY = 'e%9b8a%f6s6lef6+mr6#x%=vr%x=&9tseg_9)ws4+-h)7ywz6#'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['192.168.1.144', 'plantgrower', 'localhost', gethostname(), gethostbyname(gethostname())]
+ALLOWED_HOSTS = [
+    '192.168.1.144', 'plantgrower', 'localhost', '127.0.0.1'
+]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
-    'bootstrap3',
-    'plantgrower',
-    'dashing',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
+    'bootstrap3',
+    'plantgrower',
+    'dashing',
 ]
 
 MIDDLEWARE = [
