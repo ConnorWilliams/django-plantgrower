@@ -27,7 +27,13 @@ test: clean-pyc
 	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower -vv
 
 run-dev:
+	python manage.py runworker &
+	python manage.py update_grow &
 	python manage.py runserver
+
+kill-dev:
+	for pid in `ps -l | grep python | awk ' {print $$2} '` ; do kill $$pid ; done
+	for pid in `ps -l | grep redid-server | awk ' {print $$2} '` ; do kill $$pid ; done
 
 run:
 	python manage.py runworker &
@@ -37,4 +43,3 @@ run:
 kill:
 	for pid in `ps -l | grep python | awk ' {print $$4} '` ; do kill $$pid ; done
 	for pid in `ps -l | grep daphne | awk ' {print $$4} '` ; do kill $$pid ; done
-

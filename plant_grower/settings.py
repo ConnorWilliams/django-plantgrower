@@ -141,3 +141,10 @@ CHANNEL_LAYERS = {
         "ROUTING": "plantgrower.routing.channel_routing",
     },
 }
+
+# Dashing settings
+DASHING = {
+    'INSTALLED_WIDGETS': (
+        'number', 'list', 'graph', 'clock', 'knob', 'new_users'
+    ),
+}
