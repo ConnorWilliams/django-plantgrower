@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'plantgrower',
     'dashing',
+    'widget_party',
 ]
 
 MIDDLEWARE = [
@@ -145,6 +146,20 @@ CHANNEL_LAYERS = {
 # Dashing settings
 DASHING = {
     'INSTALLED_WIDGETS': (
-        'number', 'list', 'graph', 'clock', 'knob', 'new_users'
+        'number',
+        'list',
+        'graph',
+        'clock',
+        'knob',
+        'new_users',
+        'assignment',
+        'buildstatus',
+        'commitlist',
+        'fatlist',
+        'fatnumber',
+        'informednumber',
+        'linklist',
+        'sizednumber',
+        'skinnylist',
     ),
 }
