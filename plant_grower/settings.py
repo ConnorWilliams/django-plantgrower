@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'plantgrower',
     'dashing',
-    'widget_party',
+    'widget_party'
 ]
 
 MIDDLEWARE = [

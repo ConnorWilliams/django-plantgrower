@@ -1,3 +1,6 @@
 django
 channels
 django-bootstrap3
+django-dashing
+../django-plantgrower
+beatserver
