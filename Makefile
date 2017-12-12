@@ -17,9 +17,6 @@ flush:
 lint:
 	flake8 .
 
-test: clean-pyc
-	pytest --cov-report term-missing --cov-config .coveragerc --cov=plantgrower -vv
-
 run-dev:
 	beatserver plant_grower.asgi:channel_layer &
 	python manage.py runserver &
