@@ -22,13 +22,16 @@ run-dev:
 	python manage.py runserver &
 
 kill-dev:
-	for pid in `ps -l | grep python | awk ' {print $$2} '` ; do kill $$pid ; done
-	for pid in `ps -l | grep redis-server | awk ' {print $$2} '` ; do kill $$pid ; done
+	for pid in `ps -l | grep python | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
+	for pid in `ps -l | grep beatserver | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
+	for pid in `ps -l | grep redis-server | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
 
 run:
+	# python manage.py runworker &
 	beatserver plant_grower.asgi:channel_layer &
 	daphne -b 0.0.0.0 -p 8001 plant_grower.asgi:channel_layer &
 
 kill:
-	for pid in `ps -l | grep python | awk ' {print $$4} '` ; do kill $$pid ; done
-	for pid in `ps -l | grep daphne | awk ' {print $$4} '` ; do kill $$pid ; done
+	# for pid in `ps -l | grep python | awk ' {print $$4} '` ; do kill sigterm $$pid ; done
+	for pid in `ps -l | grep beatserver | awk ' {print $$4} '` ; do kill sigterm $$pid ; done
+	for pid in `ps -l | grep daphne | awk ' {print $$4} '` ; do kill sigterm $$pid ; done
