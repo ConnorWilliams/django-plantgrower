@@ -4,3 +4,4 @@ django-bootstrap3
 django-dashing
 ../django-plantgrower
 beatserver
+widget_party

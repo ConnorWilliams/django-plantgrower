@@ -26,8 +26,7 @@ kill-dev:
 	for pid in `ps -l | grep redis-server | awk ' {print $$2} '` ; do kill $$pid ; done
 
 run:
-	python manage.py runworker &
-	python manage.py update_grow &
+	beatserver plant_grower.asgi:channel_layer &
 	daphne -b 0.0.0.0 -p 8001 plant_grower.asgi:channel_layer &
 
 kill:
