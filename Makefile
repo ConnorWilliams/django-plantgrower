@@ -17,6 +17,10 @@ flush:
 lint:
 	flake8 .
 
+build:
+	python ../django-plantgrower/setup.py sdist
+	pip install -U ../django-plantgrower/
+
 run-dev:
 	beatserver plant_grower.asgi:channel_layer &
 	python manage.py runserver &
