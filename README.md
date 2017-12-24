@@ -12,7 +12,8 @@ Django project intended for django-plantgrower app
 ## Intended application
 django-plantgrower cutom plant grower app
 
-## Nginx proxy configuration
+## Deployment
+### Nginx proxy configuration
 In `/etc/nginx/sites-available/plantgrower`:
 
 ```
@@ -37,6 +38,9 @@ http {
   }
 }
 ```
+
+### Circus config for supervising Daphne and workers
+
 
 ## Channels Info
 When you want to enable channels in production, you need to do three things:

@@ -125,6 +125,11 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'plantgrower': {
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
         },

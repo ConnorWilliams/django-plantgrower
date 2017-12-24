@@ -22,7 +22,7 @@ build:
 	pip install -U ../django-plantgrower/
 
 run-dev:
-	beatserver plant_grower.asgi:channel_layer &
+	beatserver plant_grower.asgi:channel_layer >> /var/log/plantgrower/plantgrower.log &
 	python manage.py runserver &
 
 kill-dev:
@@ -32,7 +32,7 @@ kill-dev:
 
 run:
 	python manage.py runworker &
-	beatserver plant_grower.asgi:channel_layer &
+	beatserver plant_grower.asgi:channel_layer >> /var/log/plantgrower/plantgrower.log &
 	daphne -b 0.0.0.0 -p 8001 plant_grower.asgi:channel_layer &
 
 kill:
