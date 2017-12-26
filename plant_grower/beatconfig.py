@@ -8,7 +8,7 @@ BEAT_SCHEDULE = {
     },
     'monitor_grow': {
         'channel_name': 'monitor-grow',
-        'schedule': timedelta(seconds=60),
+        'schedule': timedelta(seconds=30),
         'message': {}
     },
 }
