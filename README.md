@@ -39,7 +39,27 @@ http {
 }
 ```
 
-### Circus config for supervising Daphne and workers
+Then run `ln -s /etc/nginx/sites-available/plantgrower /etc/nginx/sites-enabled/` to enable the site.
+
+### Systemd service config for running circus on boot
+In `/lib/systemd/system/circus.service`:
+```
+[Unit]
+Description=Circus process manager
+After=syslog.target network.target nss-lookup.target
+
+[Service]
+Type=simple
+ExecReload=/usr/bin/circusctl reload
+ExecStart=/usr/local/bin/circusd /home/pi/plant_grower/plantgrower.ini
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+```
+
+Then run `systemctl enable circus`, possibly with `sudo`.
 
 
 ## Channels Info
@@ -50,7 +70,11 @@ When you want to enable channels in production, you need to do three things:
 3. Run interface servers (Daphne) - They do the work of taking incoming requests and loading them into the channels system.
 
 ## TODO
-- [ ] [Logging](https://docs.djangoproject.com/en/2.0/topics/logging/)
-- [ ] [Circus](http://circus.readthedocs.io/en/latest/usecases/) for process monitoring on workers and interface server
+- [x] [Logging](https://docs.djangoproject.com/en/2.0/topics/logging/)
+- [x] [Circus](http://circus.readthedocs.io/en/latest/usecases/) for process monitoring on workers and interface server
+- [x] Save current light state in model
+- [x] Only switch lights if in stage 2 or 3
+- [ ] Put temp sensor inside bucket
+- [x] Always switch side lights before top
 - [ ] [Django secure production deployment checklist](https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/)
 - [ ] Finish unit tests

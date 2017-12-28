@@ -3,12 +3,17 @@ from datetime import timedelta
 BEAT_SCHEDULE = {
     'send_grow_information': {
         'channel_name': 'send-grow-information',
-        'schedule': timedelta(milliseconds=500),
+        'schedule': timedelta(seconds=1),
         'message': {}
     },
-    'monitor_grow': {
-        'channel_name': 'monitor-grow',
-        'schedule': timedelta(seconds=30),
+    'check_light_status': {
+        'channel_name': 'check-light-status',
+        'schedule': timedelta(seconds=10),
+        'message': {}
+    },
+    'check_light_time': {
+        'channel_name': 'check-light-time',
+        'schedule': timedelta(seconds=10),
         'message': {}
     },
 }

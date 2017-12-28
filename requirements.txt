@@ -6,3 +6,5 @@ django-dashing
 beatserver
 widget_party
 circus
+asgi_redis
+RPi.GPIO
