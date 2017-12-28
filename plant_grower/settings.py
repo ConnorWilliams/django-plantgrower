@@ -62,7 +62,7 @@ ROOT_URLCONF = 'plant_grower.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/home/pi/django-plantgrower/plantgrower/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
