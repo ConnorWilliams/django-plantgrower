@@ -3,12 +3,10 @@ TEST_PATH=./
 .PHONY: clean-pyc clean-build
 
 clean:
-	make clean-pyc
-	make flush
-
-clean-pyc:
 	find . -name '*.pyc' -delete
 	find . -name '*.pyo' -delete
+	find . -name '*.sqlite3' -delete
+	find . -name 'dump.rdb' -delete
 	# name '*~' -exec rm -f  {}
 
 flush:

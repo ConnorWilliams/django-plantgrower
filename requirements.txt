@@ -8,3 +8,4 @@ widget_party
 circus
 asgi_redis
 RPi.GPIO
+django-dbbackup

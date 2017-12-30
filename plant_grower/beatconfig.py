@@ -16,4 +16,9 @@ BEAT_SCHEDULE = {
         'schedule': timedelta(seconds=10),
         'message': {}
     },
+    'check_temperature': {
+        'channel_name': 'check-temperature',
+        'schedule': timedelta(seconds=5),
+        'message': {}
+    },
 }
