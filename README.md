@@ -62,6 +62,22 @@ WantedBy=default.target
 Then run `systemctl enable circus`, possibly with `sudo`.
 
 
+### Logrotate configuration
+In `/etc/logrotate.d/plantgrower`:
+
+```
+/var/log/plantgrower/*.log {
+    su pi pi
+    daily
+    missingok
+    rotate 14
+    compress
+    notifempty
+    create 0644 pi pi
+}
+```
+
+
 ## Channels Info
 When you want to enable channels in production, you need to do three things:
 
