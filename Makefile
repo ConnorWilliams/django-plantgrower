@@ -20,7 +20,7 @@ build:
 	pip install -U ../django-plantgrower/
 
 run-dev:
-	beatserver plant_grower.asgi:channel_layer >> /var/log/plantgrower/plantgrower.log &
+	beatserver plant_grower.asgi:channel_layer &
 	python manage.py runserver &
 
 kill-dev:
