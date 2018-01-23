@@ -21,4 +21,9 @@ BEAT_SCHEDULE = {
         'schedule': timedelta(seconds=5),
         'message': {}
     },
+    'check_moisture': {
+        'channel_name': 'check-moisture',
+        'schedule': timedelta(seconds=2),
+        'message': {}
+    },
 }

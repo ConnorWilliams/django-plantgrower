@@ -55,6 +55,15 @@ can use any item that does the same job!
 - [ ] Connect 2 circuits of 2 bulbs to relay.
 - [ ] Write more of to do list.
 
+## Electronics
+| Component | Voltage (V) | Amperage (mA) |
+| ---- | -------- | ---- | ----------- |
+| Top Light |  |  |
+| Fans |  |  |
+| Side light |  |  |
+| Water pump |  |  |
+| Raspberry Pi |  |  |
+
 ## Software Instructions
 ### Install Apache an
 The first ting we will do is the software which allows us to control the raspberry pi pins through a nice web interface where we will have nice buttons to turn the lights on and off and change their colours, rather than typing commands all the time. A website is the best solution, it's compatible with all devices and you "only" need to know four languages: HTML (for the page's skeleton), CSS (page's style), PHP (interactions with the server) and JavaScript (interactions with the user).
