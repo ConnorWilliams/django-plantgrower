@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+channels = "*"
+beatserver = "*"
+circus = "*"
+django-dbbackup = "*"
+Django = "*"
+asgi_redis = "*"
+"flake8" = "*"
+
+[dev-packages]
+"flake8" = "*"
+
+[requires]
+python_version = "3.6"

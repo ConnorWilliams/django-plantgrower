@@ -41,11 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'bootstrap3',
     'plantgrower',
     'dbbackup',
-    'dashing',
-    'widget_party'
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
