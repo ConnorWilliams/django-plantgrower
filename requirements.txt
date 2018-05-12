@@ -4,3 +4,4 @@ beatserver
 circus
 asgi_redis
 django-dbbackup
+../django-plantgrower
