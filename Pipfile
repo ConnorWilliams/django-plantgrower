@@ -14,6 +14,7 @@ asgi_redis = "*"
 "9dfea73" = {file = "file:///Users/connorwilliams/playground/django-plantgrower"}
 "636fa1d" = {path = "./../django-plantgrower"}
 djangorestframework = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 "flake8" = "*"

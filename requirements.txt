@@ -2,6 +2,7 @@ django
 channels
 beatserver
 circus
-asgi_redis
+# asgi_redis
 django-dbbackup
+django-cors-headers
 ../django-plantgrower

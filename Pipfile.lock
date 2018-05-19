@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d0a0823dd4d5a114d83a5ce814689ab1f8e1072c3d3eb1ce85115c3f771054b4"
+            "sha256": "4f1a524d2b8d99bcfde9c796d129723f610bfee472fc7d4480bc47b9ae371eee"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -102,6 +102,14 @@
             ],
             "index": "pypi",
             "version": "==2.0.5"
+        },
+        "django-cors-headers": {
+            "hashes": [
+                "sha256:0e9532628b3aa8806442d4d0b15e56112e6cfbef3735e13401935c98b842a2b4",
+                "sha256:c7ec4816ec49416517b84f317499d1519db62125471922ab78d670474ed9b987"
+            ],
+            "index": "pypi",
+            "version": "==2.2.0"
         },
         "django-dbbackup": {
             "hashes": [
@@ -266,13 +274,6 @@
                 "sha256:c25acd6c2ef7005a0cd50fa2b65deac409be2f3886e2fcd04f99fae827b179e4"
             ],
             "version": "==2.10.0"
-        },
-        "yolk": {
-            "hashes": [
-                "sha256:1c07eb4001dc133c08e66e38c5d58faa7616ae804f8d0ab02dd44a1044e7ddb8"
-            ],
-            "index": "pypi",
-            "version": "==0.4.3"
         },
         "zope.interface": {
             "hashes": [
