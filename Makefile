@@ -17,7 +17,7 @@ lint:
 
 rebuild: kill-dev
 	pipenv install ../django-plantgrower/
-	run-dev
+	make run-dev
 
 run-dev:
 	redis-server &
