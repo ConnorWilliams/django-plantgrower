@@ -15,18 +15,21 @@ flush:
 lint:
 	flake8 .
 
-build:
-	python ../django-plantgrower/setup.py sdist
-	pip install -U ../django-plantgrower/
+rebuild: kill-dev
+	pipenv install ../django-plantgrower/
+	make run-dev
 
 run-dev:
-	beatserver plant_grower.asgi:channel_layer &
+	redis-server &
 	python manage.py runserver &
+	celery -A plant_grower beat --scheduler django_celery_beat.schedulers:DatabaseScheduler &
+	celery -A plant_grower worker &
 
 kill-dev:
-	for pid in `ps -l | grep python | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
-	for pid in `ps -l | grep beatserver | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
-	for pid in `ps -l | grep redis-server | awk ' {print $$2} '` ; do kill sigterm $$pid ; done
+	for pid in `ps auxw | grep 'manage.py runserver' | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
+	for pid in `ps auxw | grep 'django_celery_beat' | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
+	for pid in `ps auxw | grep celery | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
+	for pid in `ps auxw | grep redis | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
 
 run:
 	python manage.py runworker &

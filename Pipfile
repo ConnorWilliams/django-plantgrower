@@ -15,6 +15,9 @@ asgi_redis = "*"
 "636fa1d" = {path = "./../django-plantgrower"}
 djangorestframework = "*"
 django-cors-headers = "*"
+celery = "*"
+crontab = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 "flake8" = "*"

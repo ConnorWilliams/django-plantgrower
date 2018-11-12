@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e%9b8a%f6s6lef6+mr6#x%=vr%x=&9tseg_9)ws4+-h)7ywz6#'
+SECRET_KEY = 'secret-do-not-look!!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'channels',
+    'django_celery_beat',
     'dbbackup'
 ]
 
@@ -106,7 +107,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'plantgrower': {
@@ -148,3 +149,9 @@ CHANNEL_LAYERS = {
         "ROUTING": "plantgrower.routing.channel_routing",
     },
 }
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # our redis address
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

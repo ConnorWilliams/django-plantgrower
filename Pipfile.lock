@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4f1a524d2b8d99bcfde9c796d129723f610bfee472fc7d4480bc47b9ae371eee"
+            "sha256": "71a68743fd5a03db73c61faa183e257f75fdd306dd9c1a96a1ebbeab30c7426c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -20,7 +20,14 @@
             "path": "./../django-plantgrower"
         },
         "9dfea73": {
-            "file": "file:///Users/connorwilliams/playground/django-plantgrower"
+            "file": "file:///Users/connorwilliams/playground/plant_grower_project/django-plantgrower"
+        },
+        "amqp": {
+            "hashes": [
+                "sha256:4e28d3ea61a64ae61830000c909662cb053642efddbe96503db0e7783a6ee85b",
+                "sha256:cba1ace9d4ff6049b190d8b7991f9c1006b443a5238021aca96dd6ad2ac9da22"
+            ],
+            "version": "==2.2.2"
         },
         "asgi-redis": {
             "hashes": [
@@ -65,6 +72,21 @@
             "index": "pypi",
             "version": "==0.0.4"
         },
+        "billiard": {
+            "hashes": [
+                "sha256:1d7b22bdc47aa52841120fcd22a74ae4fc8c13e9d3935643098184f5788c3ce6",
+                "sha256:abd9ce008c9a71ccde2c816f8daa36246e92a21e6a799831b887d88277187ecd"
+            ],
+            "version": "==3.5.0.3"
+        },
+        "celery": {
+            "hashes": [
+                "sha256:77ff3730198d6a17b3c1f05579ebe570b579efb35f6d7e13dba3b1368d068b35",
+                "sha256:81a67f0d53a688ec2bc8557bd5d6d7218f925a6f2e6df80e01560de9e28997ec"
+            ],
+            "index": "pypi",
+            "version": "==4.1.0"
+        },
         "channels": {
             "hashes": [
                 "sha256:02a82661241de0cf3bfa228cfc1e3e5c999a31215e213e6502a7ed60391c5e3f",
@@ -88,6 +110,13 @@
             ],
             "version": "==15.1.0"
         },
+        "crontab": {
+            "hashes": [
+                "sha256:cde162f45247e60d038e799c2768507bb461df81ab937ecfa16f44560f7d4103"
+            ],
+            "index": "pypi",
+            "version": "==0.22.1"
+        },
         "daphne": {
             "hashes": [
                 "sha256:302725f223853b05688f28c361e050f8db9568b1ce27340c76272c26b49e6d72",
@@ -102,6 +131,14 @@
             ],
             "index": "pypi",
             "version": "==2.0.5"
+        },
+        "django-celery-beat": {
+            "hashes": [
+                "sha256:1f770a936f070fd6b2ceac123ef4951fbe9e941e39b52ae9eea5ac0efe57d51d",
+                "sha256:d40e2c48aeed7043fff6064f53bc157f6a1f55b45d984eb2b52bf1b88ae96026"
+            ],
+            "index": "pypi",
+            "version": "==1.1.1"
         },
         "django-cors-headers": {
             "hashes": [
@@ -160,6 +197,13 @@
                 "sha256:ab1bc2eb84c22ccf61f17a0024f9fb6df781b39f1852764a66a7769d5adfb299"
             ],
             "version": "==0.2"
+        },
+        "kombu": {
+            "hashes": [
+                "sha256:01f0da9fe222a2183345004243d1518c0fbe5875955f1b24842f2d9c65709ade",
+                "sha256:4249d9dd9dbf1fcec471d1c2def20653c9310dd1a217272d77e4844f9d5273cb"
+            ],
+            "version": "==4.1.0"
         },
         "mccabe": {
             "hashes": [
@@ -274,6 +318,13 @@
                 "sha256:c25acd6c2ef7005a0cd50fa2b65deac409be2f3886e2fcd04f99fae827b179e4"
             ],
             "version": "==2.10.0"
+        },
+        "vine": {
+            "hashes": [
+                "sha256:52116d59bc45392af9fdd3b75ed98ae48a93e822cee21e5fda249105c59a7a72",
+                "sha256:6849544be74ec3638e84d90bc1cf2e1e9224cc10d96cd4383ec3f69e9bce077b"
+            ],
+            "version": "==1.1.4"
         },
         "zope.interface": {
             "hashes": [

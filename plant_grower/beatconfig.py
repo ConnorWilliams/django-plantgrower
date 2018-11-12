@@ -1,11 +1,11 @@
 from datetime import timedelta
 
 BEAT_SCHEDULE = {
-    'send_grow_information': {
-        'channel_name': 'send-grow-information',
-        'schedule': timedelta(seconds=1),
-        'message': {}
-    },
+    # 'send_grow_information': {
+    #     'channel_name': 'send-grow-information',
+    #     'schedule': timedelta(seconds=1),
+    #     'message': {}
+    # },
     'check_light_status': {
         'channel_name': 'check-light-status',
         'schedule': timedelta(seconds=10),
