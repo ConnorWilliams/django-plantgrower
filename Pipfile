@@ -13,7 +13,7 @@ django-rest-framework = "*"
 channels_redis = "*"
 Django = "*"
 django_celery_beat = "*"
-"636fa1d" = {path = "./../django-plantgrower"}
+"redis" = "*"
 
 [dev-packages]
 "flake8" = "*"

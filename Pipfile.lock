@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "778c903045d3b590379fff9be780634b865d4689f63a166e11a3d30357f33b65"
+            "sha256": "503915cb781a90522db1d29be63e268dcfff2dbafc6f6499932531654a5a347e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,9 +16,6 @@
         ]
     },
     "default": {
-        "636fa1d": {
-            "path": "./../django-plantgrower"
-        },
         "aioredis": {
             "hashes": [
                 "sha256:84d62be729beb87118cf126c20b0e3f52d7a42bb7373dc5bcdd874f26f1f251a",
@@ -263,6 +260,14 @@
                 "sha256:8e0f8568c118d3077b46be7d654cc8167fa916092e28320cde048e54bfc9f1e6"
             ],
             "version": "==2018.7"
+        },
+        "redis": {
+            "hashes": [
+                "sha256:8a1900a9f2a0a44ecf6e8b5eb3e967a9909dfed219ad66df094f27f7d6f330fb",
+                "sha256:a22ca993cea2962dbb588f9f30d0015ac4afcc45bee27d3978c0dbe9e97c6c0f"
+            ],
+            "index": "pypi",
+            "version": "==2.10.6"
         },
         "six": {
             "hashes": [
