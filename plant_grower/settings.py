@@ -77,6 +77,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'plant_grower.wsgi.application'
+ASGI_APPLICATION = 'plant_grower.routing.application'
 
 
 # Database
@@ -142,11 +143,10 @@ use_websockets = True
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [("localhost", 6379)],
         },
-        "ROUTING": "plantgrower.routing.channel_routing",
     },
 }
 

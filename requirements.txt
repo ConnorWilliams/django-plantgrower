@@ -1,8 +1,0 @@
-django
-channels
-beatserver
-circus
-# asgi_redis
-django-dbbackup
-django-cors-headers
-../django-plantgrower

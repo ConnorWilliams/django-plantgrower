@@ -1,12 +1,12 @@
-import os
-import sys
-import channels.asgi
+"""
+ASGI entrypoint. Configures Django and then runs the application
+defined in the ASGI_APPLICATION setting.
+"""
 
-sys.path.append('/home/pi/plant_grower')
-sys.path.append(
-    '/home/pi/.virtualenvs/plantgrower/lib/python3.5/site-packages/'
-)
+import os
+import django
+from channels.routing import get_default_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "plant_grower.settings")
-
-channel_layer = channels.asgi.get_channel_layer()
+django.setup()
+application = get_default_application()

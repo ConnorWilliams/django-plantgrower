@@ -4,20 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-channels = "==1.1.8"
-beatserver = "==0.0.4"
-circus = "*"
-django-dbbackup = "*"
-Django = "*"
-asgi_redis = "*"
-"flake8" = "*"
-"9dfea73" = {file = "file:///Users/connorwilliams/playground/django-plantgrower"}
-"636fa1d" = {path = "./../django-plantgrower"}
-djangorestframework = "*"
-django-cors-headers = "*"
+channels = "*"
 celery = "*"
-crontab = "*"
-django-celery-beat = "*"
+django-dbbackup = "*"
+django-cors-headers = "*"
+django-plantgrower = {git = "https://github.com/ConnorWilliams/django-plantgrower.git", ref = "master"}
+django-rest-framework = "*"
+channels_redis = "*"
+Django = "*"
+django_celery_beat = "*"
+"636fa1d" = {path = "./../django-plantgrower"}
 
 [dev-packages]
 "flake8" = "*"
