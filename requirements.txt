@@ -1,0 +1,11 @@
+Django
+redis
+channels
+channels_redis
+celery
+django_celery_beat
+django-rest-framework
+django-dbbackup
+django-cors-headers
+git+git://github.com/ConnorWilliams/django-plantgrower.git#egg=django-plantgrower
+flake8
