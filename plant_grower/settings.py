@@ -145,13 +145,21 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [(
+                os.getenv('REDIS_HOST', 'localhost'),
+                os.getenv('REDIS_PORT', '6379')
+            )],
         },
     },
 }
 
+REDIS_URL = "redis://{host}:{port}".format(
+    host=os.getenv('REDIS_HOST', 'localhost'),
+    port=os.getenv('REDIS_PORT', '6379')
+)
+
 # Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379'  # our redis address
+CELERY_BROKER_URL = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
