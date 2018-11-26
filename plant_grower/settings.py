@@ -24,7 +24,7 @@ SECRET_KEY = 'secret-do-not-look!!'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.144', 'plantgrower', 'localhost', '127.0.0.1'
+    '192.168.1.144', 'plantgrower', 'localhost', '127.0.0.1', '192.168.99.100'
 ]
 
 # Application definition
@@ -145,13 +145,13 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": [("redis", 6379)],
         },
     },
 }
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # our redis address
+CELERY_BROKER_URL = 'redis://redis:6379'  # our redis address
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
