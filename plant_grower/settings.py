@@ -82,11 +82,19 @@ ASGI_APPLICATION = 'plant_grower.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+DB_LOCATION = "redis://{host}:{port}".format(
+    host=os.getenv('REDIS_HOST', 'localhost'),
+    port=os.getenv('REDIS_PORT', '6379')
+)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT', 5432)
+     }
 }
 
 LOGGING = {
@@ -163,3 +171,4 @@ CELERY_BROKER_URL = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
