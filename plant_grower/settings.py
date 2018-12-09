@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'channels',
-    'django_celery_beat',
+    # 'django_celery_beat',
     'dbbackup'
 ]
 
@@ -168,6 +168,8 @@ REDIS_URL = "redis://{host}:{port}".format(
 
 # Celery settings
 CELERY_BROKER_URL = REDIS_URL
+CELERY_REDBEAT_REDIS_URL = REDIS_URL
+CELERY_BEAT_SCHEDULER = 'redbeat.RedBeatScheduler'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
