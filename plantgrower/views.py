@@ -102,6 +102,30 @@ class NewInputDevice(View):
             raise Http404("Cannot save input device.")
 
 
+class NewOutputDevice(View):
+    def get(self, request, grow_id):
+        grow = get_object_or_404(Grow, pk=grow_id)
+        output_device = OutputDevice(
+            grow=grow
+        )
+        form = OutputDeviceForm(instance=output_device)
+        return render(
+            request, 'plantgrower/outputdevice_form.html', {'form': form, 'grow': grow}
+        )
+
+    def post(self, request, grow_id):
+        grow = get_object_or_404(Grow, pk=grow_id)
+        output_device = OutputDevice(
+            grow=grow
+        )
+        form = OutputDeviceForm(request.POST, instance=output_device)
+        if form.is_valid():
+            form.save()
+            return redirect('plantgrower:growcontrol', grow_id=grow_id)
+        else:
+            raise Http404("Cannot save output device.")
+
+
 class EditGrow(View):
     def get(self, request, grow_id):
         grow = get_object_or_404(Grow, pk=grow_id)
