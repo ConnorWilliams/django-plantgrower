@@ -84,6 +84,10 @@
       {% endfor %}
     </div>
     {% endfor %}
+
+    <a href="{% url 'plantgrower:newoutputdevice' grow.id %}" method="post">
+      <button type="button" class="btn btn-warning">Add Output Device</button>
+    </a>
   </div>
 </div>
 {% endblock %}
