@@ -176,14 +176,16 @@ class Grow(models.Model):
         if self.current_stage not in ['2', '3']:
             return 'a different grow phase'
 
-        current_light_duration = 0
-        if self.lights_on:
-            current_light_duration = self.light_duration
-        else:
-            current_light_duration = self.dark_duration
+        current_light_duration = self.light_duration
+        light_switch_date = timezone.localtime(timezone.now())
+        # TODO: Add this logic back in but have to check output_devices of category='light'.
+        # if self.lights_on:
+        #     current_light_duration = self.light_duration
+        # else:
+        #     current_light_duration = self.dark_duration
 
         delta = (
-            self.light_switch_date +
+            light_switch_date +
             timedelta(hours=int(current_light_duration)) -
             timezone.localtime(timezone.now())
         )

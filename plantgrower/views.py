@@ -153,10 +153,11 @@ class NextStage(View):
         if grow.current_stage == '6':
             grow.status = '2'
         else:
+            # TODO: Add this logic back in by looking at light devices.
             # Flowering -> Chop
-            if grow.current_stage == '3':
-                grow.light_switch_date = timezone.localtime(timezone.now())
-                grow.lights_on = False
+            # if grow.current_stage == '3':
+            #     grow.light_switch_date = timezone.localtime(timezone.now())
+            #     grow.lights_on = False
             grow.current_stage = str(int(grow.current_stage) + 1)
         grow.stage_switch_date = timezone.localtime(timezone.now())
         grow.save()
