@@ -26,12 +26,18 @@
 PreCommit:
  PythonFlake8:
    enabled: true
+   max-line-length: 120
    exclude:
       - 'plantgrower/migrations/*'
 
  TrailingWhitespace:
    enabled: true
+   exclude:
+      - 'plantgrower/migrations/*'
 
 PrePush:
- Pytest:
-   enabled: false
+  RunTests:
+    enabled: true
+    description: 'Running tests...'
+    command: ['./runtests.py']
+    quiet: false

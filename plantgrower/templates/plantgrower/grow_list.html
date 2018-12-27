@@ -1,0 +1,14 @@
+{% extends "plantgrower/base.html" %}
+
+{% block content %}
+    <h2>Grows</h2>
+    <ul>
+        {% for grow in object_list %}
+            <li>
+                <a href="{% url 'plantgrower:growcontrol' grow.id %}">
+                    {{ grow.strain }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
