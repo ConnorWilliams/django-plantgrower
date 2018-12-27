@@ -37,17 +37,9 @@
       </div>
     </div>
 
-    <button type="button" id="top_lights" class="btn btn-warning">Top Lights</button>
-    <button type="button" id="side_lights" class="btn btn-warning">Side Lights</button>
-    <button type="button" id="fans" class="btn btn-warning">Fans</button>
-    <button type="button" id="pump" class="btn btn-warning">Water Pump</button>
     <a href="{% url 'plantgrower:editgrow' grow.id %}" method="post">
       <button type="button" class="btn btn-warning">Edit Grow</button>
     </a>
-    <a href="{% url 'plantgrower:nextstage' grow.id %}" method="post">
-      <button type="button" class="btn btn-success">Next Stage</button>
-    </a>
-
   </div>
 </div>
 <div class="row">
@@ -84,6 +76,10 @@
       {% endfor %}
     </div>
     {% endfor %}
+
+    <a href="{% url 'plantgrower:newoutputdevice' grow.id %}" method="post">
+      <button type="button" class="btn btn-warning">Add Output Device</button>
+    </a>
   </div>
 </div>
 {% endblock %}
