@@ -1,0 +1,90 @@
+{% extends "plantgrower/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="col">
+    <h1>Summary</h1>
+    <h2 id='strain'>{{ grow.strain }}</h2>
+
+    <div class="card">
+      <h3 class="card-header">Grow Time</h3>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Started on <p id='start_date'>{{ grow.start_date }}</p></li>
+        <li class="list-group-item">Has been growing for <p id='grow_time'></p></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="card-header">Grow Stage</h3>
+      <div class="card-block">
+        <h4 class="card-title">{{ grow.get_current_stage_display }}</h4>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Stage time: <p id='stage_time'></p></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="card-header">Lights</h3>
+      <div class="card-block">
+        <h4 class="card-title">Should be <p id='light_status'></p></h4>
+      </div>
+      <div class="card-block">
+        <h4 class="card-title">Status</h4>
+        <p class="card-text">Top lights are currently <p id='top_lights_on'></p>.</p>
+        <p class="card-text">Side lights are currently <p id='side_lights_on'></p>.</p>
+      </div>
+      <div class="card-block">
+        <h4 class="card-title">Schedule</h4>
+        <p class="card-text">{{ grow.light_duration }}H light and {{ grow.dark_duration }}H dark.</p>
+      </div>
+      <div class="card-block">
+        <h4 class="card-title">Next Change</h4>
+        <p class="card-text">Lights will change in <p id='switch_countdown'></p>.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-header">Fans</h3>
+      <div class="card-block">
+        <h4 class="card-title">Status</h4>
+        <p class="card-text">Fans are currently <p id='fans_on'></p>.</p>
+      </div>
+    </div>
+
+    <button type="button" id="top_lights" class="btn btn-warning">Top Lights</button>
+    <button type="button" id="side_lights" class="btn btn-warning">Side Lights</button>
+    <button type="button" id="fans" class="btn btn-warning">Fans</button>
+    <button type="button" id="pump" class="btn btn-warning">Water Pump</button>
+
+  </div>
+
+  <div class="col">
+    <h1>Graphs</h1>
+    {% for sensor_type, sensors in all_sensors.items %}
+      <div class="card">
+        <h3 class="card-header">{{ sensor_type }}</h3>
+        {% for sensor in sensors %}
+          <div class="card-block">
+            <p class="card-text"><p id="{{ sensor.category }}-{{ sensor.pin }}">{{ sensor.category }}-{{ sensor.pin }}</p>.</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <a href="{% url 'plantgrower:editgrow' grow.id %}" method="post">
+      <button type="button" class="btn btn-warning">Edit Grow</button>
+    </a>
+    <a href="{% url 'plantgrower:nextstage' grow.id %}" method="post">
+      <button type="button" class="btn btn-success">Next Stage</button>
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{% static 'plantgrower/js/jquery-3.2.1.min.js' %}"></script>
+  <script type="text/javascript" src='{% static "/plantgrower/js/sensor.js" %}'></script>
+{% endblock %}
