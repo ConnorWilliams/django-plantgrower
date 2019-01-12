@@ -6,7 +6,7 @@ from django.views import View
 from django.utils import timezone
 from django.views.generic import ListView
 from rest_framework import generics
-from plantgrower.models import Grow, InputDevice, OutputDevice, Reading
+from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
 from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm
 from plantgrower.serializers import (
     GrowSerializer,
@@ -130,7 +130,12 @@ class NewOutputDevice(View):
         )
         form = OutputDeviceForm(request.POST, instance=output_device)
         if form.is_valid():
-            form.save()
+            output_device = form.save(commit=False)
+            if output_device.category == 'light':
+                light = Light(outputdevice=output_device)
+                light.save()
+            else:
+                output_device.save()
             return redirect('plantgrower:growcontrol', grow_id=grow_id)
         else:
             raise Http404("Cannot save output device.")
