@@ -25,5 +25,6 @@ class OutputDeviceForm(ModelForm):
     class Meta:
         model = OutputDevice
         exclude = [
-            'grow'
+            'grow',
+            'turned_on'
         ]
