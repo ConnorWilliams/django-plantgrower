@@ -1,6 +1,6 @@
 import logging
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.utils import timezone
@@ -53,22 +53,32 @@ class Grows(ListView):
 
 class GrowControl(View):
     def get(self, request, grow_id):
-        grow = get_object_or_404(Grow, pk=grow_id)
-        input_devices = self.categorize_devices(grow.inputdevice_set)
-        logger.info("HELLO")
-        logger.info(input_devices)
-        output_devices = self.categorize_devices(grow.outputdevice_set)
+        self.grow = get_object_or_404(Grow, pk=grow_id)
+        logger.info(self.grow)
+        input_devices = self._get_devices(InputDevice)
+        output_devices = self._get_devices(OutputDevice)
         return render(
             request,
             'plantgrower/dashboard.html',
             {
-                'grow': grow,
+                'grow': self.grow,
                 'input_devices': input_devices,
                 'output_devices': output_devices
             }
         )
     
-    def categorize_devices(self, devices):
+    def _get_devices(self, device_type):
+        categorized_devices = {}
+        try:
+            categorized_devices = self._categorize_devices(
+                device_type.objects.get(grow=self.grow)
+            )
+        except AttributeError as e:
+            logger.debug("No devices found.")
+            logger.debug(e)
+        return categorized_devices
+    
+    def _categorize_devices(self, devices):
         categorized_devices = {}
         for category in devices.order_by().values_list(
             'category', flat=True
