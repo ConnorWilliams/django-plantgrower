@@ -192,11 +192,11 @@ class Grow(models.Model):
 
         return self.time_duration_string(delta)
 
-
-class Device(models.Model):
-    class Meta:
-        abstract = True
-    
+# When each model in the hierarchy is a model all by itself. Each model corresponds
+# to its own database table and can be queried and created individually. The
+# inheritance relationship introduces links between the child model and each of its
+# parents (via an automatically-created OneToOneField). For example:
+class Device(models.Model):    
     RPI_PIN_VALIDATORS = [
         MaxValueValidator(27),
         MinValueValidator(-1)
@@ -215,14 +215,19 @@ class Device(models.Model):
         except ValueError:
             return None
 
-
+# All of the fields of Device will also be available in InputDevice, although the
+# data will reside in a different database table.
+# If you have a Device that is also a InputDevice, you can get from the Device object
+# to the InputDevice object by using the lower-case version of the model name:
+# >>> device = Device.objects.get(id=12)
+# If p is a InputDevice object, this will give the child class:
+# >>> device.inputdevice
 class InputDevice(Device):
     INPUT_CATEGORIES = [
         ('temperature', 'temperature'),
         ('humidity', 'humidity'),
         ('moisture', 'moisture')
     ]
-
     category = models.CharField(max_length=255, choices=INPUT_CATEGORIES)
     model = models.CharField(max_length=255, blank=True)
 
@@ -237,7 +242,7 @@ class InputDevice(Device):
 
     @property
     def latest_reading(self):
-        return Reading.objects.filter(sensor=self).latest().value
+        return self.readings().latest().value
 
 
 class OutputDevice(Device):
@@ -247,11 +252,18 @@ class OutputDevice(Device):
         ('pump', 'pump')
     ]
     category = models.CharField(max_length=255, choices=OUTPUT_CATEGORIES)
-    last_switch_time = models.DateTimeField(auto_now_add=True)
     turned_on = models.BooleanField(default=False)
 
     def __str__(self):
         return '{}: {} on pin {}'.format(self.name, self.category, self.pin)
+
+
+class Light(OutputDevice):
+    OUTPUT_CATEGORIES = [
+        ('light', 'light')
+    ]
+    last_switch_time = models.DateTimeField(auto_now_add=True)
+    next_switch_time = models.DateTimeField(auto_now_add=True)
 
 
 class Reading(models.Model):
