@@ -71,9 +71,9 @@ class GrowControl(View):
         categorized_devices = {}
         try:
             categorized_devices = self._categorize_devices(
-                device_type.objects.get(grow=self.grow)
+                device_type.objects.filter(grow=self.grow)
             )
-        except AttributeError as e:
+        except device_type.DoesNotExist as e:
             logger.debug("No devices found.")
             logger.debug(e)
         return categorized_devices
