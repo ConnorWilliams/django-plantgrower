@@ -1,42 +1,22 @@
-HOST=127.0.0.1
-TEST_PATH=./
-.PHONY: clean-pyc clean-build
 
-clean:
-	find . -name '*.pyc' -delete
-	find . -name '*.pyo' -delete
-	find . -name '*.sqlite3' -delete
-	find . -name 'dump.rdb' -delete
-	# name '*~' -exec rm -f  {}
+# HELP
+# This will output the help for each task
+# thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.PHONY: help
 
-flush:
-	python manage.py flush --noinput
+help: ## This help.
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-lint:
-	flake8 .
+.DEFAULT_GOAL := help
 
-rebuild: kill-dev
-	pipenv install ../django-plantgrower/
-	make run-dev
+NAMESPACE := $(if $(NAMESPACE),$(NAMESPACE),eggmancw)
+APP_NAME := $(if $(APP_NAME),$(APP_NAME),plant_grower)
+LABEL := $(if $(LABEL),$(LABEL),first)
 
-run-dev:
-	redis-server &
-	python manage.py runserver &
-	celery -A plant_grower beat --scheduler django_celery_beat.schedulers:DatabaseScheduler &
-	celery -A plant_grower worker &
+# DOCKER TASKS
+# Build the container
+build: ## Build the container
+	docker build -t $(NAMESPACE)/$(APP_NAME):$(LABEL) .
 
-kill-dev:
-	for pid in `ps auxw | grep 'manage.py runserver' | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
-	for pid in `ps auxw | grep 'django_celery_beat' | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
-	for pid in `ps auxw | grep celery | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
-	for pid in `ps auxw | grep redis | grep -v grep | awk ' {print $$2} '` ; do echo $$pid; kill $$pid ; done
-
-run:
-	python manage.py runworker &
-	beatserver plant_grower.asgi:channel_layer >> /var/log/plantgrower/plantgrower.log &
-	daphne -b 0.0.0.0 -p 8001 plant_grower.asgi:channel_layer &
-
-kill:
-	for pid in `ps -l | grep python | awk ' {print $$4} '` ; do kill $$pid ; done
-	for pid in `ps -l | grep beatserver | awk ' {print $$4} '` ; do kill $$pid ; done
-	for pid in `ps -l | grep daphne | awk ' {print $$4} '` ; do kill $$pid ; done
+build-nc: ## Build the container without caching
+	docker build -t $(NAMESPACE)/$(APP_NAME):$(LABEL) --no-cache .
