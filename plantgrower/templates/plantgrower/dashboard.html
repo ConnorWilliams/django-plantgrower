@@ -74,6 +74,12 @@
         <h4 class="card-title">{{ device.name }} {{ device.category }}</h4>
         <p class="card-text">On pin {{ device.pin }}.</p>
         <p class="card-text">Currently turned {{ device.turned_on }}.</p>
+        {% if device.last_switch_time %}
+          <p class="card-text">Last switched at {{ device.last_switch_time }}.</p>
+        {% endif %}
+        {% if device.next_switch_time %}
+          <p class="card-text">Next switch at {{ device.next_switch_time }}.</p>
+        {% endif %}
       </div>
       {% endfor %}
     </div>

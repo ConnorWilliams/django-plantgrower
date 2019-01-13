@@ -130,12 +130,12 @@ class NewOutputDevice(View):
         )
         form = OutputDeviceForm(request.POST, instance=output_device)
         if form.is_valid():
-            output_device = form.save(commit=False)
+            output_device = form.save()
             if output_device.category == 'light':
-                light = Light(outputdevice=output_device)
+                logger.debug(output_device)
+                light = Light(outputdevice_ptr=output_device, device_ptr=output_device.device)
+                logger.debug(light)
                 light.save()
-            else:
-                output_device.save()
             return redirect('plantgrower:growcontrol', grow_id=grow_id)
         else:
             raise Http404("Cannot save output device.")
