@@ -9,4 +9,4 @@ django-dbbackup
 django-cors-headers
 # git+git://github.com/ConnorWilliams/django-plantgrower.git#egg=django-plantgrower
 flake8
-psycopg2
+psycopg2-binary
