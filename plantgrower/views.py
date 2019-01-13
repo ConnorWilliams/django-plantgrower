@@ -168,15 +168,21 @@ class NextStage(View):
         if grow.current_stage == '6':
             grow.status = '2'
         else:
-            # TODO: Add this logic back in by looking at light devices.
             # Flowering -> Chop
-            # if grow.current_stage == '3':
-            #     grow.light_switch_date = timezone.localtime(timezone.now())
-            #     grow.lights_on = False
+            if grow.current_stage == '3':
+                self._turn_lights_off(grow)
             grow.current_stage = str(int(grow.current_stage) + 1)
         grow.stage_switch_date = timezone.localtime(timezone.now())
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
+    
+    def _turn_lights_off(self, grow):
+        lights = Light.objects.filter(grow=grow)
+        for light in lights:
+            light.last_switch_time = timezone.localtime(timezone.now())
+            light.next_switch_time = None
+            light.turned_on = False
+            light.save()
 
 
 class GrowList(generics.ListCreateAPIView):

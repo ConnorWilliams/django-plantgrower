@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.utils import timezone
-from plantgrower.models import Grow
+from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
 from datetime import timedelta
 import unittest.mock as mock
 import pytz
@@ -139,11 +139,18 @@ class TestGrowModel(TestCase):
 
     def test_switch_countdown(self):
         grow = create_grow('', 1, 2)
+        grow.save()
         self.assertEqual(
             grow.switch_countdown,
             'a different grow phase'
         )
         grow.current_stage = '2'
+        self.assertEqual(
+            grow.switch_countdown,
+            'No lights found for this grow.'
+        )
+        light = Light(grow=grow, pin=10, name='Test', category='light')
+        light.save()
         self.assertEqual(
             grow.switch_countdown,
             '22 hours 59 minutes 59 seconds'  # 23 hours
