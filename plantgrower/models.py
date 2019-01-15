@@ -282,7 +282,23 @@ class Light(OutputDevice):
     next_switch_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
-        return '{} {} on pin {}. Last switched: {}.'.format(self.name, self.category, self.pin, self.last_switch_time)
+        return '{} {} on pin {}. Last switched: {}.'.format(
+            self.name, self.category, self.pin, self.last_switch_time
+        )
+    
+    def switch(self, status=None):
+        # TODO Add logic for next_switch_time by looking at self.grow.light_duration
+        if status is None:
+            # Just toggle
+            self.turned_on = not self.turned_on
+            self.last_switch_time = timezone.localtime(timezone.now())
+        else:
+            # Set with supplied status argument
+            if status != self.turned_on:
+                # Only update switch time if we change
+                self.last_switch_time = timezone.localtime(timezone.now())
+            self.turned_on = status
+        self.save()
 
 
 class Reading(models.Model):

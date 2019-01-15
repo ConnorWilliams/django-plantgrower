@@ -181,25 +181,28 @@ class EditGrow(View):
 class NextStage(View):
     def get(self, request, grow_id):
         grow = get_object_or_404(Grow, pk=grow_id)
+        if grow.current_stage == '6':
+            return redirect('plantgrower:growcontrol', grow_id=grow_id)
+        
+        grow.current_stage = str(int(grow.current_stage) + 1)
+        grow.stage_switch_date = timezone.localtime(timezone.now())
         # If finished, change status to complete.
         if grow.current_stage == '6':
             grow.status = '2'
-        else:
-            # Flowering -> Chop
-            if grow.current_stage == '3':
-                self._turn_lights_off(grow)
-            grow.current_stage = str(int(grow.current_stage) + 1)
-        grow.stage_switch_date = timezone.localtime(timezone.now())
+        # If turning to a stage with no light, turn em off.
+        if grow.current_stage in ['1', '4', '5', '6']:
+            [
+                light.switch(False) for 
+                light in Light.objects.filter(grow=grow)
+            ]
+        # If turning to a stage with light, turn em on.
+        if grow.current_stage in ['2', '3']:
+            [
+                light.switch(True) for 
+                light in Light.objects.filter(grow=grow)
+            ]
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
-    
-    def _turn_lights_off(self, grow):
-        lights = Light.objects.filter(grow=grow)
-        for light in lights:
-            light.last_switch_time = timezone.localtime(timezone.now())
-            light.next_switch_time = None
-            light.turned_on = False
-            light.save()
 
 
 class GrowList(generics.ListCreateAPIView):
