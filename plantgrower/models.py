@@ -232,6 +232,10 @@ class InputDevice(Device):
         ('humidity', 'humidity'),
         ('moisture', 'moisture')
     ]
+    device = models.OneToOneField(
+        Device, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     category = models.CharField(max_length=255, choices=INPUT_CATEGORIES)
     model = models.CharField(max_length=255, blank=True)
 
@@ -255,6 +259,10 @@ class OutputDevice(Device):
         ('fan', 'fan'),
         ('pump', 'pump')
     ]
+    device = models.OneToOneField(
+        Device, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     category = models.CharField(max_length=255, choices=OUTPUT_CATEGORIES)
     turned_on = models.BooleanField(default=False)
 
@@ -266,8 +274,15 @@ class Light(OutputDevice):
     OUTPUT_CATEGORIES = [
         ('light', 'light')
     ]
+    output_device = models.OneToOneField(
+        OutputDevice, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     last_switch_time = models.DateTimeField(auto_now_add=True)
     next_switch_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    def __str__(self):
+        return '{} {} on pin {}. Last switched: {}.'.format(self.name, self.category, self.pin, self.last_switch_time)
 
 
 class Reading(models.Model):

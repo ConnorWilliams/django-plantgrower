@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.test import Client
 from django.urls import reverse
 
-from plantgrower.models import Grow
+from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
+from plantgrower.views import NewOutputDevice
 
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -126,3 +127,42 @@ class TestEditGrowView(TestCase):
             grow.strain,
             'Strain1'
         )
+
+class TestNewOutputDeviceView(TestCase):
+    def test_post(self):
+        """
+        All grows are displayed on the page
+        """
+        self.client = Client()
+        grow = Grow('', 12, 12)
+        response = self.client.post('/plantgrower/newoutputdevice/1', {
+            'name': 'Test',
+            'pin': '10',
+            'category': 'fan',
+        })
+        # self.assertEqual(
+        #     response.status_code,
+        #     302
+        # )
+        self.assertEqual(
+            len(OutputDevice.objects.all()),
+            1
+        )
+        response = self.client.post('/plantgrower/newoutputdevice/1', {
+            'name': 'Test',
+            'pin': '11',
+            'category': 'light',
+        })
+        # self.assertEqual(
+        #     response.status_code,
+        #     302
+        # )
+        self.assertEqual(
+            len(OutputDevice.objects.all()),
+            2
+        )
+        self.assertEqual(
+            len(Light.objects.all()),
+            1
+        )
+        
