@@ -20,3 +20,9 @@ build: ## Build the container
 
 build-nc: ## Build the container without caching
 	docker build -t $(NAMESPACE)/$(APP_NAME):$(LABEL) --no-cache .
+
+test:
+	docker run -d -p 5432:5432 --name test-postgres -e POSTGRES_PASSWORD=123456 -d postgres
+	-docker run --name PG --rm -i -t eggmancw/plant_grower:first python -Wa manage.py test plantgrower.tests
+	docker stop test-postgres
+	docker rm test-postgres

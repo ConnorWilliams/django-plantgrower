@@ -4,9 +4,10 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.utils import timezone
+from django.db.utils import IntegrityError
 from django.views.generic import ListView
 from rest_framework import generics
-from plantgrower.models import Grow, InputDevice, OutputDevice, Reading
+from plantgrower.models import Grow, Device, InputDevice, Reading, OutputDevice, Light
 from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm
 from plantgrower.serializers import (
     GrowSerializer,
@@ -63,7 +64,7 @@ class GrowControl(View):
             {
                 'grow': self.grow,
                 'input_devices': input_devices,
-                'output_devices': output_devices
+                'output_devices': output_devices,
             }
         )
     
@@ -76,6 +77,7 @@ class GrowControl(View):
         except device_type.DoesNotExist as e:
             logger.debug("No devices found.")
             logger.debug(e)
+        logger.debug(categorized_devices)
         return categorized_devices
     
     def _categorize_devices(self, devices):
@@ -83,8 +85,10 @@ class GrowControl(View):
         for category in devices.order_by().values_list(
             'category', flat=True
         ).distinct():
+            if category == 'light':
+                logger.debug(devices.filter(category=category)[0].light)
             categorized_devices[category] = \
-                devices.filter(category=category).values()
+                devices.filter(category=category)
         return categorized_devices
 
 
@@ -124,16 +128,34 @@ class NewOutputDevice(View):
         )
 
     def post(self, request, grow_id):
-        grow = get_object_or_404(Grow, pk=grow_id)
+        self.grow = get_object_or_404(Grow, pk=grow_id)
         output_device = OutputDevice(
-            grow=grow
+            grow=self.grow
         )
         form = OutputDeviceForm(request.POST, instance=output_device)
         if form.is_valid():
-            form.save()
-            return redirect('plantgrower:growcontrol', grow_id=grow_id)
+            self._create_output_device_from_form(form)
+            return redirect('plantgrower:growcontrol', grow_id=self.grow.id)
         else:
-            raise Http404("Cannot save output device.")
+            raise Http404("Form is not valid. Did not save.")
+    
+    def _create_output_device_from_form(self, form):
+        output_device = form.save()
+        if output_device.category == 'light':
+            self._create_light_from_outputdevice(output_device)
+        return output_device
+
+    def _create_light_from_outputdevice(self, output_device):
+        light = Light(
+            name=output_device.name,
+            pin=output_device.pin,
+            category=output_device.category,
+            grow = self.grow,
+            output_device = output_device
+        )
+        light.save()
+        return light
+
 
 
 class EditGrow(View):
@@ -163,15 +185,21 @@ class NextStage(View):
         if grow.current_stage == '6':
             grow.status = '2'
         else:
-            # TODO: Add this logic back in by looking at light devices.
             # Flowering -> Chop
-            # if grow.current_stage == '3':
-            #     grow.light_switch_date = timezone.localtime(timezone.now())
-            #     grow.lights_on = False
+            if grow.current_stage == '3':
+                self._turn_lights_off(grow)
             grow.current_stage = str(int(grow.current_stage) + 1)
         grow.stage_switch_date = timezone.localtime(timezone.now())
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
+    
+    def _turn_lights_off(self, grow):
+        lights = Light.objects.filter(grow=grow)
+        for light in lights:
+            light.last_switch_time = timezone.localtime(timezone.now())
+            light.next_switch_time = None
+            light.turned_on = False
+            light.save()
 
 
 class GrowList(generics.ListCreateAPIView):

@@ -178,19 +178,23 @@ class Grow(models.Model):
 
         current_light_duration = self.light_duration
         light_switch_date = timezone.localtime(timezone.now())
-        # TODO: Add this logic back in but have to check output_devices of category='light'.
-        # if self.lights_on:
-        #     current_light_duration = self.light_duration
-        # else:
-        #     current_light_duration = self.dark_duration
+        lights = Light.objects.filter(grow=self)
+        if len(lights) > 0:
+            if lights[0].outputdevice_ptr.turned_on:
+                current_light_duration = self.light_duration
+            else:
+                current_light_duration = self.dark_duration
 
-        delta = (
-            light_switch_date +
-            timedelta(hours=int(current_light_duration)) -
-            timezone.localtime(timezone.now())
-        )
+            delta = (
+                light_switch_date +
+                timedelta(hours=int(current_light_duration)) -
+                timezone.localtime(timezone.now())
+            )
 
-        return self.time_duration_string(delta)
+            return self.time_duration_string(delta)
+        else:
+            return "No lights found for this grow."
+
 
 # When each model in the hierarchy is a model all by itself. Each model corresponds
 # to its own database table and can be queried and created individually. The
@@ -228,6 +232,10 @@ class InputDevice(Device):
         ('humidity', 'humidity'),
         ('moisture', 'moisture')
     ]
+    device = models.OneToOneField(
+        Device, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     category = models.CharField(max_length=255, choices=INPUT_CATEGORIES)
     model = models.CharField(max_length=255, blank=True)
 
@@ -251,6 +259,10 @@ class OutputDevice(Device):
         ('fan', 'fan'),
         ('pump', 'pump')
     ]
+    device = models.OneToOneField(
+        Device, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     category = models.CharField(max_length=255, choices=OUTPUT_CATEGORIES)
     turned_on = models.BooleanField(default=False)
 
@@ -262,8 +274,15 @@ class Light(OutputDevice):
     OUTPUT_CATEGORIES = [
         ('light', 'light')
     ]
+    output_device = models.OneToOneField(
+        OutputDevice, on_delete=models.CASCADE,
+        parent_link=True,
+    )
     last_switch_time = models.DateTimeField(auto_now_add=True)
-    next_switch_time = models.DateTimeField(auto_now_add=True)
+    next_switch_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    def __str__(self):
+        return '{} {} on pin {}. Last switched: {}.'.format(self.name, self.category, self.pin, self.last_switch_time)
 
 
 class Reading(models.Model):
