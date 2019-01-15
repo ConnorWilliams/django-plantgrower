@@ -180,7 +180,7 @@ class Grow(models.Model):
         light_switch_date = timezone.localtime(timezone.now())
         lights = Light.objects.filter(grow=self)
         if len(lights) > 0:
-            if lights[0].outputdevice_ptr.turned_on:
+            if lights[0].outputdevice.turned_on:
                 current_light_duration = self.light_duration
             else:
                 current_light_duration = self.dark_duration
