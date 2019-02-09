@@ -77,7 +77,6 @@ class GrowControl(View):
         except device_type.DoesNotExist as e:
             logger.debug("No devices found.")
             logger.debug(e)
-        logger.debug(categorized_devices)
         return categorized_devices
     
     def _categorize_devices(self, devices):
@@ -85,8 +84,6 @@ class GrowControl(View):
         for category in devices.order_by().values_list(
             'category', flat=True
         ).distinct():
-            if category == 'light':
-                logger.debug(devices.filter(category=category)[0].light)
             categorized_devices[category] = \
                 devices.filter(category=category)
         return categorized_devices
@@ -100,7 +97,9 @@ class NewInputDevice(View):
         )
         form = InputDeviceForm(instance=input_device)
         return render(
-            request, 'plantgrower/inputdevice_form.html', {'form': form, 'grow': grow}
+            request,
+            'plantgrower/inputdevice_form.html',
+            {'form': form, 'grow': grow}
         )
 
     def post(self, request, grow_id):
@@ -181,25 +180,28 @@ class EditGrow(View):
 class NextStage(View):
     def get(self, request, grow_id):
         grow = get_object_or_404(Grow, pk=grow_id)
+        if grow.current_stage == '6':
+            return redirect('plantgrower:growcontrol', grow_id=grow_id)
+        
+        grow.current_stage = str(int(grow.current_stage) + 1)
+        grow.stage_switch_date = timezone.localtime(timezone.now())
         # If finished, change status to complete.
         if grow.current_stage == '6':
             grow.status = '2'
-        else:
-            # Flowering -> Chop
-            if grow.current_stage == '3':
-                self._turn_lights_off(grow)
-            grow.current_stage = str(int(grow.current_stage) + 1)
-        grow.stage_switch_date = timezone.localtime(timezone.now())
+        # If turning to a stage with no light, turn em off.
+        if grow.current_stage in ['1', '4', '5', '6']:
+            [
+                light.switch(False) for 
+                light in Light.objects.filter(grow=grow)
+            ]
+        # If turning to a stage with light, turn em on.
+        if grow.current_stage in ['2', '3']:
+            [
+                light.switch(True) for 
+                light in Light.objects.filter(grow=grow)
+            ]
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
-    
-    def _turn_lights_off(self, grow):
-        lights = Light.objects.filter(grow=grow)
-        for light in lights:
-            light.last_switch_time = timezone.localtime(timezone.now())
-            light.next_switch_time = None
-            light.turned_on = False
-            light.save()
 
 
 class GrowList(generics.ListCreateAPIView):

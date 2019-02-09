@@ -18,8 +18,6 @@ class GrowSerializer(serializers.ModelSerializer):
             'status',
             'grow_time',
             'stage_time',
-            'light_duration',
-            'dark_duration',
             'current_temperature',
             'current_moisture',
             'current_humidity',
