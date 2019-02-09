@@ -15,6 +15,7 @@ class GrowSerializer(serializers.ModelSerializer):
             'veg_light_duration',
             'flower_light_duration',
             'temperature',
+            'humidity',
             'status',
             'grow_time',
             'stage_time',

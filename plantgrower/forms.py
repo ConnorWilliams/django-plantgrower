@@ -11,6 +11,7 @@ class GrowForm(ModelForm):
             'veg_light_duration',
             'flower_light_duration',
             'temperature',
+            'humidity'
         ]
 
 
