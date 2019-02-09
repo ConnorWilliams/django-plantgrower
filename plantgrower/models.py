@@ -108,20 +108,22 @@ class Grow(models.Model):
     @property
     def light_duration(self):
         if self.current_stage == '2':
-            return self.veg_light_duration
+            duration = self.veg_light_duration
         elif self.current_stage == '3':
-            return self.flower_light_duration
+            duration = self.flower_light_duration
         else:
-            return 0
+            duration = 0
+        return timedelta(hours=duration)
 
     @property
     def dark_duration(self):
         if self.current_stage == '2':
-            return 24 - self.veg_light_duration
+            duration = 24 - self.veg_light_duration
         elif self.current_stage == '3':
-            return 24 - self.flower_light_duration
+            duration = 24 - self.flower_light_duration
         else:
-            return 24
+            duration = 24
+        return timedelta(hours=duration)
 
     @property
     def current_temperature(self):
@@ -177,17 +179,10 @@ class Grow(models.Model):
             return 'a different grow phase'
 
         current_light_duration = self.light_duration
-        light_switch_date = timezone.localtime(timezone.now())
         lights = Light.objects.filter(grow=self)
         if len(lights) > 0:
-            if lights[0].outputdevice.turned_on:
-                current_light_duration = self.light_duration
-            else:
-                current_light_duration = self.dark_duration
-
             delta = (
-                light_switch_date +
-                timedelta(hours=int(current_light_duration)) -
+                lights[0].next_switch_time -
                 timezone.localtime(timezone.now())
             )
 
@@ -287,16 +282,23 @@ class Light(OutputDevice):
         )
     
     def switch(self, status=None):
-        # TODO Add logic for next_switch_time by looking at self.grow.light_duration
+        """Switch light device.
+
+        Keyword arguments:
+        status -- True if lights should be on, False otherwise
+                  (default None - this will just toggle the lights)
+        """
         if status is None:
             # Just toggle
             self.turned_on = not self.turned_on
             self.last_switch_time = timezone.localtime(timezone.now())
+            self.next_switch_time += self.grow.light_duration if self.turned_on else self.grow.dark_duration
         else:
             # Set with supplied status argument
             if status != self.turned_on:
-                # Only update switch time if we change
+                # Only update switch time if we actually change status on/off
                 self.last_switch_time = timezone.localtime(timezone.now())
+                self.next_switch_time += self.grow.light_duration if self.turned_on else self.grow.dark_duration
             self.turned_on = status
         self.save()
 

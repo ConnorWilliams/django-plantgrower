@@ -77,7 +77,6 @@ class GrowControl(View):
         except device_type.DoesNotExist as e:
             logger.debug("No devices found.")
             logger.debug(e)
-        logger.debug(categorized_devices)
         return categorized_devices
     
     def _categorize_devices(self, devices):
@@ -85,8 +84,6 @@ class GrowControl(View):
         for category in devices.order_by().values_list(
             'category', flat=True
         ).distinct():
-            if category == 'light':
-                logger.debug(devices.filter(category=category)[0].light)
             categorized_devices[category] = \
                 devices.filter(category=category)
         return categorized_devices
@@ -100,7 +97,9 @@ class NewInputDevice(View):
         )
         form = InputDeviceForm(instance=input_device)
         return render(
-            request, 'plantgrower/inputdevice_form.html', {'form': form, 'grow': grow}
+            request,
+            'plantgrower/inputdevice_form.html',
+            {'form': form, 'grow': grow}
         )
 
     def post(self, request, grow_id):
