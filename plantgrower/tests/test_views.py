@@ -47,6 +47,7 @@ class TestIndexView(TestCase):
             'veg_light_duration': '1',
             'flower_light_duration': '1',
             'temperature': '24',
+            'humidity': '62'
         })
         self.assertEqual(
             response.status_code,
