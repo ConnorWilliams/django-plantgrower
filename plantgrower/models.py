@@ -283,27 +283,6 @@ class Light(OutputDevice):
         return '{} {} on pin {}. Last switched: {}.'.format(
             self.name, self.category, self.pin, self.last_switch_time
         )
-    
-    def switch(self, status=None):
-        """Switch light device.
-
-        Keyword arguments:
-        status -- True if lights should be on, False otherwise
-                  (default None - this will just toggle the lights)
-        """
-        if status is None:
-            # Just toggle
-            self.turned_on = not self.turned_on
-            self.last_switch_time = timezone.localtime(timezone.now())
-            self.next_switch_time += self.grow.light_duration if self.turned_on else self.grow.dark_duration
-        else:
-            # Set with supplied status argument
-            if status != self.turned_on:
-                # Only update switch time if we actually change status on/off
-                self.last_switch_time = timezone.localtime(timezone.now())
-                self.next_switch_time += self.grow.light_duration if self.turned_on else self.grow.dark_duration
-            self.turned_on = status
-        self.save()
 
 
 class Reading(models.Model):

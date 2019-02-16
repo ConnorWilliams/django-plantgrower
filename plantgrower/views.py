@@ -188,18 +188,7 @@ class NextStage(View):
         # If finished, change status to complete.
         if grow.current_stage == '6':
             grow.status = '2'
-        # If turning to a stage with no light, turn em off.
-        if grow.current_stage in ['1', '4', '5', '6']:
-            [
-                light.switch(False) for 
-                light in Light.objects.filter(grow=grow)
-            ]
-        # If turning to a stage with light, turn em on.
-        if grow.current_stage in ['2', '3']:
-            [
-                light.switch(True) for 
-                light in Light.objects.filter(grow=grow)
-            ]
+        
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
 
