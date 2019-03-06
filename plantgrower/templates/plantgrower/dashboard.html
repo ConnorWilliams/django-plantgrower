@@ -73,7 +73,7 @@
       <div class="card-block">
         <h4 class="card-title">{{ device.name }} {{ device.category }}</h4>
         <p class="card-text">On pin {{ device.pin }}.</p>
-        <p class="card-text">Currently turned {{ device.turned_on }}.</p>
+        <p class="card-text">Currently turned {{ device.system_status }}.</p>
         {% if device.light.last_switch_time %}
           <p class="card-text">Last switched: {{ device.light.last_switch_time }}.</p>
         {% endif %}
