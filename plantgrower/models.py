@@ -181,7 +181,6 @@ class Grow(models.Model):
         if self.current_stage not in ['2', '3']:
             return 'a different grow phase'
 
-        current_light_duration = self.light_duration
         lights = Light.objects.filter(grow=self)
         if len(lights) > 0:
             delta = (
@@ -262,7 +261,8 @@ class OutputDevice(Device):
         parent_link=True,
     )
     category = models.CharField(max_length=255, choices=OUTPUT_CATEGORIES)
-    turned_on = models.BooleanField(default=False)
+    user_status = models.NullBooleanField(default=None)
+    system_status = models.BooleanField(default=False)
 
     def __str__(self):
         return '{}: {} on pin {}'.format(self.name, self.category, self.pin)

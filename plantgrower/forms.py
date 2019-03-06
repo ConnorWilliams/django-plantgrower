@@ -27,5 +27,6 @@ class OutputDeviceForm(ModelForm):
         model = OutputDevice
         exclude = [
             'grow',
-            'turned_on'
+            'system_status',
+            'user_status'
         ]
