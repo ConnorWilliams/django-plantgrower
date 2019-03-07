@@ -4,12 +4,7 @@ import logging
 import pika
 import json
 
-LOG_FORMAT = (
-    '%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
-    '-35s %(lineno) -5d: %(message)s'
-)
-LOGGER = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
+logger = logging.getLogger(__name__)
 
 
 class AMQPPublisher(object):
@@ -28,11 +23,13 @@ class AMQPPublisher(object):
     EXCHANGE = 'plantgrower'
     ROUTING_KEY = '/to_grow'
 
-    def __init__(self, amqp_url, routing_key):
+    def __init__(self, amqp_host, routing_key, message):
         """Setup the publisher object, passing in the URL we will use
         to connect to RabbitMQ.
 
         :param str amqp_url: The URL for connecting to RabbitMQ
+
+        Run the initialisation code by connecting and then starting the IOLoop.
 
         """
         self._connection = None
@@ -40,7 +37,23 @@ class AMQPPublisher(object):
         self.ROUTING_KEY = routing_key
 
         self._stopping = False
-        self._url = amqp_url
+        self._host = amqp_host
+        self.message = message
+
+        while not self._stopping:
+            self._connection = None
+
+            try:
+                self._connection = self.connect()
+                self._connection.ioloop.start()
+            except KeyboardInterrupt:
+                self.stop()
+                if (self._connection is not None and
+                        not self._connection.is_closed):
+                    # Finish closing
+                    self._connection.ioloop.start()
+
+        logger.debug('Stopped')
 
     def connect(self):
         """This method connects to RabbitMQ, returning the connection handle.
@@ -52,11 +65,10 @@ class AMQPPublisher(object):
         :rtype: pika.SelectConnection
 
         """
-        LOGGER.info('Connecting to %s', self._url)
+        logger.debug('Connecting to %s', self._host)
         return pika.SelectConnection(
-            pika.URLParameters(self._url),
+            pika.ConnectionParameters(host='rabbitmq'),
             on_open_callback=self.on_connection_open,
-            on_close_callback=self.on_connection_closed
         )
 
     def on_connection_open(self, unused_connection):
@@ -67,7 +79,6 @@ class AMQPPublisher(object):
         :type unused_connection: pika.SelectConnection
 
         """
-        LOGGER.info('Connection opened')
         self.open_channel()
 
     def open_channel(self):
@@ -77,7 +88,6 @@ class AMQPPublisher(object):
         will be invoked.
 
         """
-        LOGGER.info('Creating a new channel')
         self._connection.channel(on_open_callback=self.on_channel_open)
 
     def on_channel_open(self, channel):
@@ -89,10 +99,11 @@ class AMQPPublisher(object):
         :param pika.channel.Channel channel: The channel object
 
         """
-        LOGGER.info('Channel opened')
         self._channel = channel
+        self.publish_message()
+        self.stop()
 
-    def publish_message(self, message):
+    def publish_message(self):
         """If the class is not stopping, publish a message to RabbitMQ,
         appending a list of deliveries with the message number that was sent.
         This list will be used to check for delivery confirmations in the
@@ -111,28 +122,9 @@ class AMQPPublisher(object):
         self._channel.basic_publish(
             self.EXCHANGE,
             self.ROUTING_KEY,
-            json.dumps(message, ensure_ascii=False),
+            json.dumps(self.message, ensure_ascii=False),
         )
-        LOGGER.info('Published message')
-
-    def initialise(self):
-        """Run the initialisation code by connecting and then starting the IOLoop.
-
-        """
-        while not self._stopping:
-            self._connection = None
-
-            try:
-                self._connection = self.connect()
-                self._connection.ioloop.start()
-            except KeyboardInterrupt:
-                self.stop()
-                if (self._connection is not None and
-                        not self._connection.is_closed):
-                    # Finish closing
-                    self._connection.ioloop.start()
-
-        LOGGER.info('Stopped')
+        logger.info(f'Published \"{self.message}\" to {self.EXCHANGE}')
 
     def stop(self):
         """Stop the example by closing the channel and connection. We
@@ -143,7 +135,7 @@ class AMQPPublisher(object):
         disconnect from RabbitMQ.
 
         """
-        LOGGER.info('Stopping')
+        logger.debug('Stopping')
         self._stopping = True
         self.close_channel()
         self.close_connection()
@@ -154,11 +146,11 @@ class AMQPPublisher(object):
 
         """
         if self._channel is not None:
-            LOGGER.info('Closing the channel')
+            logger.debug('Closing the channel')
             self._channel.close()
 
     def close_connection(self):
         """This method closes the connection to RabbitMQ."""
         if self._connection is not None:
-            LOGGER.info('Closing connection')
+            logger.debug('Closing connection')
             self._connection.close()

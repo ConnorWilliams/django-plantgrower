@@ -78,11 +78,9 @@ def send_amqp_message(grow_id, message):
     """
     Sends a message to a grow device
     """
-    # Connect to rabbitmq:5672 as guest with the password guest
-    publisher = AMQPPublisher(
-        'amqp://guest:guest@rabbitmq:5672',
-        'to_grow/' + grow_id
+    logger.info(f'Sending {message} to grow {grow_id}')
+    AMQPPublisher(
+        'rabbitmq',
+        'to_grow/' + str(grow_id),
+        message=message
     )
-    publisher.initialise()
-    publisher.publish_message(message)
-    publisher.stop()

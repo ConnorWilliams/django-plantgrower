@@ -8,4 +8,5 @@ django-rest-framework==0.1.0
 django-dbbackup
 django-cors-headers
 flake8
+pika
 psycopg2-binary
