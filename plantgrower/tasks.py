@@ -2,6 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from plantgrower.models import Grow, OutputDevice, Light
+from plantgrower.publisher import AMQPPublisher
 from django.utils import timezone
 from plantgrower.serializers import GrowSerializer
 from channels.layers import get_channel_layer
@@ -60,8 +61,28 @@ def monitor_light(light_id):
 
 
 def send_device_instruction(output_device):
-    # Send instruction to IoT device queue to turn device on or off
+    """
+    Send instruction to IoT device queue to turn device on or off
+    """
+    status = output_device.system_status
     if output_device.user_status is not None:
-        logger.debug(f"Sending instruction to turn device {output_device.user_status} from user_status")
-    else:
-        logger.debug(f"Sending instruction to turn light {output_device.system_status}")
+        status = output_device.user_status
+
+    send_amqp_message(
+        output_device.grow.id,
+        (output_device.pin, status)
+    )
+
+
+def send_amqp_message(grow_id, message):
+    """
+    Sends a message to a grow device
+    """
+    # Connect to rabbitmq:5672 as guest with the password guest
+    publisher = AMQPPublisher(
+        'amqp://guest:guest@rabbitmq:5672',
+        'to_grow/' + grow_id
+    )
+    publisher.initialise()
+    publisher.publish_message(message)
+    publisher.stop()
