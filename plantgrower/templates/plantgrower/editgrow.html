@@ -3,7 +3,9 @@
 {% block content %}
 <form action='{% url 'plantgrower:editgrow' grow.id %}' method="post" class="form">
   {% csrf_token %}
-  {{ form }}
+  <ul>
+    {{ form.as_ul }}
+  </ul>
   <button type="submit" class="btn btn-primary">Save</button>
 </form>
 

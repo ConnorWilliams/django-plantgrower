@@ -1,0 +1,19 @@
+<div class="card-block">
+    <h4 class="card-title">{{ device.name }} {{ device.category }}</h4>
+    <p class="card-text">On pin {{ device.pin }}.</p>
+    <p class="card-text">Currently turned {{ device.system_status }}.</p>
+    {% if device.light %}
+        <p class="card-text">Last switched: {{ device.light.last_switch_time }}.</p>
+        <p class="card-text">Next switch: {{ device.light.next_switch_time }}.</p>
+    {% endif %}
+
+    <form action="{% url 'plantgrower:switchoutputdevice' device.id %}" method="post" class="form">
+        {% csrf_token %}
+        {{ switch_form }}
+        <input type="submit" value="Turn On">
+    </form>
+
+    {% for key, value in device.items %}
+        {{ key }}: {{ value }}
+    {% endfor %}
+</div>
