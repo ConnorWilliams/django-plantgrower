@@ -3,12 +3,12 @@ import logging
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.views.generic.edit import FormView
 from django.utils import timezone
-from django.db.utils import IntegrityError
 from django.views.generic import ListView
 from rest_framework import generics
-from plantgrower.models import Grow, Device, InputDevice, Reading, OutputDevice, Light
-from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm
+from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
+from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm, SwitchOutputDeviceForm
 from plantgrower.serializers import (
     GrowSerializer,
     InputDeviceSerializer,
@@ -55,33 +55,25 @@ class Grows(ListView):
 class GrowControl(View):
     def get(self, request, grow_id):
         self.grow = get_object_or_404(Grow, pk=grow_id)
-        logger.info(self.grow)
-        input_devices = self._get_devices(InputDevice)
-        output_devices = self._get_devices(OutputDevice)
         return render(
             request,
             'plantgrower/dashboard.html',
             {
                 'grow': self.grow,
-                'input_devices': input_devices,
-                'output_devices': output_devices,
+                'input_devices': self._get_devices(InputDevice),
+                'output_devices': self._get_devices(OutputDevice),
+                'switch_form': SwitchOutputDeviceForm()
             }
         )
-    
+
     def _get_devices(self, device_type):
-        categorized_devices = {}
-        try:
-            categorized_devices = self._categorize_devices(
-                device_type.objects.filter(grow=self.grow)
-            )
-        except device_type.DoesNotExist as e:
-            logger.debug("No devices found.")
-            logger.debug(e)
-        return categorized_devices
-    
+        return self._categorize_devices(
+            device_type.objects.filter(grow=self.grow)
+        )
+
     def _categorize_devices(self, devices):
         categorized_devices = {}
-        for category in devices.order_by().values_list(
+        for category in devices.values_list(
             'category', flat=True
         ).distinct():
             categorized_devices[category] = \
@@ -123,7 +115,9 @@ class NewOutputDevice(View):
         )
         form = OutputDeviceForm(instance=output_device)
         return render(
-            request, 'plantgrower/outputdevice_form.html', {'form': form, 'grow': grow}
+            request,
+            'plantgrower/outputdevice_form.html',
+            {'form': form, 'grow': grow}
         )
 
     def post(self, request, grow_id):
@@ -149,12 +143,27 @@ class NewOutputDevice(View):
             name=output_device.name,
             pin=output_device.pin,
             category=output_device.category,
-            grow = self.grow,
-            output_device = output_device
+            grow=self.grow,
+            output_device=output_device
         )
         light.save()
         return light
 
+
+class SwitchOutputDevice(View):
+    def post(self, request, outputdevice_id):
+        form = SwitchOutputDeviceForm(request.POST)
+        output_device = get_object_or_404(OutputDevice, pk=outputdevice_id)
+        if form.is_valid():
+            logger.info(f"Turning {output_device} on for {form.cleaned_data['duration']} seconds.")
+            # Change device.user_status to True
+            # device.save()
+            # Add task in X seconds to set device.user_status back to None
+
+        return redirect(
+            'plantgrower:growcontrol',
+            grow_id=output_device.grow.id
+        )
 
 
 class EditGrow(View):
