@@ -50,9 +50,10 @@ class OutputDeviceSerializer(serializers.ModelSerializer):
             'grow',
             'name',
             'pin',
-            'category'
-            'last_switch_time'
-            'turned_on'
+            'category',
+            'last_switch_time',
+            'system_status',
+            'user_status'
         )
 
 

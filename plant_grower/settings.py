@@ -174,8 +174,13 @@ REDIS_URL = "redis://{host}:{port}".format(
 # Celery settings
 CELERY_BROKER_URL = REDIS_URL
 CELERY_REDBEAT_REDIS_URL = REDIS_URL
+CELERY_BEAT_SCHEDULE = {
+    'run_device_monitoring_every_second': {
+        'task': 'plantgrower.tasks.monitor_devices',
+        'schedule': 1.0
+    }
+}
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-

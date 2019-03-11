@@ -46,6 +46,11 @@ urlpatterns = [
         name='newoutputdevice'
     ),
     path(
+        'switchoutputdevice/<int:outputdevice_id>/',
+        views.SwitchOutputDevice.as_view(),
+        name='switchoutputdevice'
+    ),
+    path(
         'api/grows/',
         views.GrowList.as_view()
     ),
