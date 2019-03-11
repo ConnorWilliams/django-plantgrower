@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.generic import ListView
 from rest_framework import generics
 from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
+from plantgrower.tasks import switch_device
 from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm, SwitchOutputDeviceForm
 from plantgrower.serializers import (
     GrowSerializer,
@@ -131,7 +132,7 @@ class NewOutputDevice(View):
             return redirect('plantgrower:growcontrol', grow_id=self.grow.id)
         else:
             raise Http404("Form is not valid. Did not save.")
-    
+
     def _create_output_device_from_form(self, form):
         output_device = form.save()
         if output_device.category == 'light':
@@ -155,10 +156,18 @@ class SwitchOutputDevice(View):
         form = SwitchOutputDeviceForm(request.POST)
         output_device = get_object_or_404(OutputDevice, pk=outputdevice_id)
         if form.is_valid():
-            logger.info(f"Turning {output_device} on for {form.cleaned_data['duration']} seconds.")
-            # Change device.user_status to True
-            # device.save()
-            # Add task in X seconds to set device.user_status back to None
+            logger.info(
+                f"Turning {output_device} on for {form.cleaned_data['duration']} seconds."
+            )
+            # Switch device user status now
+            switch_device.apply_async(
+                (output_device.id, True)
+            )
+            # Set it back to None after time elapsed
+            switch_device.apply_async(
+                (output_device.id, None),
+                countdown=form.cleaned_data['duration']
+            )
 
         return redirect(
             'plantgrower:growcontrol',

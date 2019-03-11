@@ -60,6 +60,13 @@ def monitor_light(light_id):
     send_device_instruction(light.output_device)
 
 
+@shared_task(ignore_result=True)
+def switch_device(output_device_id, status=None):
+    output_device = OutputDevice.objects.get(pk=output_device_id)
+    output_device.user_status = status
+    output_device.save()
+
+
 def send_device_instruction(output_device):
     """
     Send instruction to IoT device queue to turn device on or off
