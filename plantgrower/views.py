@@ -3,13 +3,17 @@ import logging
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.views.generic import ListView
 from rest_framework import generics
 from plantgrower.models import Grow, InputDevice, Reading, OutputDevice, Light
 from plantgrower.tasks import switch_device
-from plantgrower.forms import GrowForm, InputDeviceForm, OutputDeviceForm, SwitchOutputDeviceForm
+from plantgrower.forms import (
+    GrowForm,
+    InputDeviceForm,
+    OutputDeviceForm,
+    SwitchOutputDeviceForm
+)
 from plantgrower.serializers import (
     GrowSerializer,
     InputDeviceSerializer,
@@ -157,7 +161,8 @@ class SwitchOutputDevice(View):
         output_device = get_object_or_404(OutputDevice, pk=outputdevice_id)
         if form.is_valid():
             logger.info(
-                f"Turning {output_device} on for {form.cleaned_data['duration']} seconds."
+                f"Turning {output_device} on for"
+                f"{form.cleaned_data['duration']} seconds."
             )
             # Switch device user status now
             switch_device.apply_async(
@@ -206,7 +211,7 @@ class NextStage(View):
         # If finished, change status to complete.
         if grow.current_stage == '6':
             grow.status = '2'
-        
+
         grow.save()
         return redirect('plantgrower:growcontrol', grow_id=grow_id)
 

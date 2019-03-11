@@ -8,6 +8,6 @@ from plantgrower.routing import plantgrower_router
 
 application = ProtocolTypeRouter({
     "websocket": URLRouter([
-        path('plantgrower/', plantgrower_router),
+        path('/', plantgrower_router),
     ])
 })
