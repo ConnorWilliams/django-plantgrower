@@ -126,7 +126,7 @@ LOGGING = {
         },
         'plantgrower': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
     },

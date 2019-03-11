@@ -193,10 +193,6 @@ class Grow(models.Model):
             return "No lights found for this grow."
 
 
-# When each model in the hierarchy is a model all by itself. Each model corresponds
-# to its own database table and can be queried and created individually. The
-# inheritance relationship introduces links between the child model and each of its
-# parents (via an automatically-created OneToOneField).
 class Device(models.Model):    
     RPI_PIN_VALIDATORS = [
         MaxValueValidator(27),
@@ -207,21 +203,14 @@ class Device(models.Model):
     name = models.CharField(max_length=100)
     pin = models.IntegerField(validators=RPI_PIN_VALIDATORS, blank=True)
 
-    def get_fields(self):
-        try:
-            return [
-                (field.name, field.value_to_string(self))
-                for field in Sensor._meta.fields
-            ]
-        except ValueError:
-            return None
 
-# All of the fields of Device will also be available in InputDevice, although the
-# data will reside in a different database table.
-# If you have a Device that is also a InputDevice, you can get from the Device object
-# to the InputDevice object by using the lower-case version of the model name:
+# All of the fields of Device will also be available in InputDevice,
+# although the data will reside in a different database table.
+# If you have a Device that is also a InputDevice, you can get from
+# the Device object to the InputDevice object by using the
+# lower-case version of the model name:
 # >>> device = Device.objects.get(id=12)
-# If p is a InputDevice object, this will give the child class:
+# If device is a InputDevice object, this will give the child class:
 # >>> device.inputdevice
 class InputDevice(Device):
     INPUT_CATEGORIES = [
@@ -277,7 +266,9 @@ class Light(OutputDevice):
         parent_link=True,
     )
     last_switch_time = models.DateTimeField(auto_now_add=True)
-    next_switch_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    next_switch_time = models.DateTimeField(
+        auto_now_add=True, blank=True, null=True
+    )
 
     def __str__(self):
         return '{} {} on pin {}. Last switched: {}.'.format(
