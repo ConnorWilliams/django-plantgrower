@@ -48,7 +48,8 @@ def monitor_light(light_id):
     Then sends instructions to the IoT device queue to turn the light on or off
     """
     light = Light.objects.get(pk=light_id)
-    if timezone.localtime(timezone.now()) > light.next_switch_time:
+    if light.grow.current_stage in ['2', '3'] and \
+            timezone.localtime(timezone.now()) > light.next_switch_time:
         # Switch light in DB
         light.last_switch_time = light.next_switch_time
         light.next_switch_time += \

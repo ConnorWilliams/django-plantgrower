@@ -196,7 +196,7 @@ class Grow(models.Model):
 # When each model in the hierarchy is a model all by itself. Each model corresponds
 # to its own database table and can be queried and created individually. The
 # inheritance relationship introduces links between the child model and each of its
-# parents (via an automatically-created OneToOneField). For example:
+# parents (via an automatically-created OneToOneField).
 class Device(models.Model):    
     RPI_PIN_VALIDATORS = [
         MaxValueValidator(27),
