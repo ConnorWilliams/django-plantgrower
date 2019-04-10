@@ -5,74 +5,50 @@ Django project and django-plantgrower app
 - Django
 - Django Channels for websockets
 - Django REST framework for API
-- Python Celery for periodic tasks and task queue
+- Python Celery for:
+  - Periodic tasks such as monitoring and sending data to front end
+  - Task Queue for monitoring tasks
 - Redis for Channels and Celery backend
+- RabbitMQ to send instructions to IoT devices
+
+## Architecture Diagram
+[Link to draw.io]()
 
 ## Deployment
-### Nginx proxy configuration
-In `/etc/nginx/sites-available/plantgrower`:
+All components have a Dockerfile and therefore is easily deployed with Kubernetes. You can deploy this locally on a Raspberry Pi, for example, for maximum privacy. However it is scalable so you can deploy in to a managed container engine and run there.
 
-```
-# Websockets: For NGINX to send the Upgrade request from the client to the backend server,
-# the Upgrade and Connection headers must be set explicitly.
+### Raspberry Pi
+There are a couple of things to do before we deploy the application, I will not try and do a better job of explaining than [Alex Ellis](https://github.com/alexellis) who has already done it so well. My scripts are based on his.
+1. [Provision a Raspberry Pi](https://github.com/ConnorWilliams/provision_raspberry_pi)
+2. Install Docker on a Raspberry Pi
+    ```bash
+    curl -sSL https://get.docker.com | sh
+    ```
+3. Set Docker to auto-start
+    ```bash
+    sudo systemctl enable docker
+    ```
 
-http {
-  map $http_upgrade $connection_upgrade {
-    default upgrade;
-    '' close;
-  }
+4. Reboot the Pi, or start the Docker daemon with:
+    ```bash
+    sudo systemctl start docker
+    ```
 
-  server {
-    listen 80;
+5. Enable Docker client
+   
+    The Docker client can only be used by root or members of the docker group. Add pi or your equivalent user to the docker group:
+    ```bash
+    sudo usermod -aG docker pi
+    ```
+6. Install Docker Compose
+    
+    Compose can also be run inside a container, from a small bash script wrapper. To install compose as a container run this command:
+    ```bash
+    sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    ```
 
-    location / {
-      proxy_pass http://0.0.0.0:8001;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection $connection_upgrade;
-    }
-  }
-}
-```
-
-Then run `ln -s /etc/nginx/sites-available/plantgrower /etc/nginx/sites-enabled/` to enable the site.
-
-### Systemd service config for running circus on boot
-In `/lib/systemd/system/circus.service`:
-```
-[Unit]
-Description=Circus process manager
-After=syslog.target network.target nss-lookup.target
-
-[Service]
-Type=simple
-ExecReload=/usr/bin/circusctl reload
-ExecStart=/usr/local/bin/circusd /home/pi/plant_grower/plantgrower.ini
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=default.target
-```
-
-Then run `systemctl enable circus`, possibly with `sudo`.
-
-
-### Logrotate configuration
-In `/etc/logrotate.d/plantgrower`:
-
-```
-/var/log/plantgrower/*.log {
-    su pi pi
-    daily
-    missingok
-    rotate 14
-    compress
-    notifempty
-    create 0644 pi pi
-}
-```
-
-## TODO
-- [ ] [Django secure production deployment checklist](https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/)
-- [ ] Finish unit tests
+    ```bash
+    curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    ```
