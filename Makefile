@@ -12,17 +12,24 @@ help: ## This help.
 NAMESPACE := $(if $(NAMESPACE),$(NAMESPACE),eggmancw)
 APP_NAME := $(if $(APP_NAME),$(APP_NAME),plant_grower)
 LABEL := $(if $(LABEL),$(LABEL),first)
+LATEST_COMMIT := $(shell git rev-parse HEAD)
+DOCKER_TAG := $(LATEST_COMMIT)
 
 # DOCKER TASKS
 # Build the container
 build: ## Build the container
-	docker build -t $(NAMESPACE)/$(APP_NAME):$(LABEL) .
+	docker build -t $(NAMESPACE)/$(APP_NAME):$(DOCKER_TAG) .
+	docker tag $(NAMESPACE)/$(APP_NAME):$(DOCKER_TAG) $(NAMESPACE)/$(APP_NAME):latest
 
 build-nc: ## Build the container without caching
-	docker build -t $(NAMESPACE)/$(APP_NAME):$(LABEL) --no-cache .
+	docker build -t $(NAMESPACE)/$(APP_NAME):$(DOCKER_TAG) --no-cache .
+	docker tag $(NAMESPACE)/$(APP_NAME):$(DOCKER_TAG) $(NAMESPACE)/$(APP_NAME):latest	
+
+push: ## Push the image to dockerhub
+	docker push $(NAMESPACE)/$(APP_NAME)
 
 test:
 	docker run -d -p 5432:5432 --name test-postgres -e POSTGRES_PASSWORD=123456 -d postgres
-	-docker run --name PG --rm -i -t eggmancw/plant_grower:first python -Wa manage.py test plantgrower.tests
+	docker run --name PG --rm -i -t eggmancw/plant_grower:first python -Wa manage.py test plantgrower.tests
 	docker stop test-postgres
 	docker rm test-postgres
