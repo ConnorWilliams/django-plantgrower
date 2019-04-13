@@ -81,21 +81,17 @@ ASGI_APPLICATION = 'plant_grower.routing.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-DB_LOCATION = "redis://{host}:{port}".format(
-    host=os.getenv('REDIS_HOST', 'localhost'),
-    port=os.getenv('REDIS_PORT', '6379')
-)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB', 'plantgrower'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'django-plantgrower'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', '123456'),
-        'HOST': os.getenv('POSTGRES_HOST', '192.168.99.100'),
+        'HOST': os.getenv('POSTGRES_HOST', 'plantgrower-postgres'),
         'PORT': os.getenv('POSTGRES_PORT', 5432),
      }
 }
+
 
 LOGGING = {
     'version': 1,
