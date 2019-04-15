@@ -14,7 +14,6 @@ class GrowConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.accept()
-        logger.warning(self.scope['path'])
         _url = self.scope['path'][1:-1].replace('/', '-')
         try:
             PeriodicTask.objects.get(name=_url)
