@@ -12,7 +12,6 @@ help: ## This help.
 NAMESPACE := $(if $(NAMESPACE),$(NAMESPACE),eggmancw)
 ARCHITECTURE := $(if $(ARCHITECTURE),$(ARCHITECTURE),amd64)
 APP_NAME := $(if $(APP_NAME),$(APP_NAME),plant_grower)
-LABEL := $(if $(LABEL),$(LABEL),first)
 LATEST_COMMIT := $(shell git rev-parse HEAD)
 DOCKER_TAG := $(LATEST_COMMIT)
 
