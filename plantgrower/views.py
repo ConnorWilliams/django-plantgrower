@@ -29,10 +29,10 @@ class Index(View):
     def get(self, request):
         if Grow.objects.filter(status='1'):
             logger.info("Active grow found")
-            return HttpResponseRedirect('/plantgrower/grows')
+            return HttpResponseRedirect('/grows')
         else:
             logger.info("No active grows")
-            return HttpResponseRedirect('/plantgrower/newgrow')
+            return HttpResponseRedirect('/newgrow')
 
 
 class NewGrow(View):
@@ -41,14 +41,14 @@ class NewGrow(View):
             form = GrowForm()
         else:
             logger.info("Showing active grow")
-            return HttpResponseRedirect('/plantgrower/')
+            return HttpResponseRedirect('/')
         return render(request, 'plantgrower/newgrow.html', {'form': form})
 
     def post(self, request):
         form = GrowForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/plantgrower/')
+            return HttpResponseRedirect('/')
 
         return render(request, 'plantgrower/newgrow.html', {'form': form})
 
