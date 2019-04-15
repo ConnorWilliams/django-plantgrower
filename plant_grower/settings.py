@@ -143,22 +143,18 @@ STATIC_ROOT = '/var/www/plantgrower/static'
 
 use_websockets = True
 
+REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
+REDIS_PORT = os.getenv('REDIS_PORT', 6379)
+REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(
-                os.getenv('REDIS_HOST', 'localhost'),
-                os.getenv('REDIS_PORT', '6379')
-            )],
-        },
-    },
+            "hosts": [(REDIS_HOST, 6379)]
+        }
+    }
 }
-
-REDIS_URL = "redis://{host}:{port}".format(
-    host=os.getenv('REDIS_HOST', 'localhost'),
-    port=os.getenv('REDIS_PORT', '6379')
-)
 
 # Celery settings
 CELERY_BROKER_URL = REDIS_URL
