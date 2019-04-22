@@ -25,7 +25,8 @@ def send_grow_information(path):
             path, {"type": "send.grow", "text": serializer.data}
         )
     except Exception as e:
-        logger.error('Could not send grow info - {}'.format(e))
+        logger.error('Could not send grow info.')
+        raise e
 
 
 @shared_task(ignore_result=True)
