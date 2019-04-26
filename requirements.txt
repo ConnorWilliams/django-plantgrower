@@ -9,4 +9,5 @@ django-dbbackup
 django-cors-headers
 flake8
 pika
+paho-mqtt
 psycopg2-binary

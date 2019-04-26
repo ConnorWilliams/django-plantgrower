@@ -7,6 +7,7 @@ from django.utils import timezone
 from plantgrower.serializers import GrowSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+import paho.mqtt.publish as publish
 import logging
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,7 @@ def send_device_instruction(output_device):
     if output_device.user_status is not None:
         status = output_device.user_status
 
-    send_amqp_message(
+    send_mqtt_message(
         output_device.grow.id,
         (output_device.pin, status)
     )
@@ -87,9 +88,17 @@ def send_amqp_message(grow_id, message):
     """
     Sends a message to a grow device
     """
-    logger.info(f'Sending {message} to grow {grow_id}')
+    logger.info(f'Sending AMQP {message} to grow {grow_id}')
     AMQPPublisher(
         'rabbitmq',
         'to_grow/' + str(grow_id),
         message=message
+    )
+
+
+def send_mqtt_message(grow_id, message):
+    logger.info(f'Sending MQTT {message} to grow {grow_id}')
+    # TODO: Get mosquitto hostname from env var or django setting
+    publish.single(
+        f"grow/{grow_id}/instruction", str(message), hostname="mosquitto"
     )
