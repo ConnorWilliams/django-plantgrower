@@ -3,13 +3,17 @@ Django project and django-plantgrower app
 
 ## Uses
 - Django
-- Django Channels for websockets
+- Django Channels for websockets interface with frontend
 - Django REST framework for API
 - Python Celery for:
   - Periodic tasks such as monitoring and sending data to front end
   - Task Queue for monitoring tasks
 - Redis for Channels and Celery backend
-- RabbitMQ to send instructions to IoT devices
+- Instructions to IoT devices over MQTT
+  - | Topic | Message Format | Description |
+    |-------|----------------|-------------|
+    | `grow/{grow_id}/instruction` | `({pin_number}, {boolean})` | Turning pins on and off |
+    | `grow/{grow_id}/sensors` | [Sensor mapping]() | Send sensor mapping and expects readings back |
 
 ## Architecture Diagram
 [Link to draw.io]()
