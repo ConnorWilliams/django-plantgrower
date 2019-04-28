@@ -78,9 +78,10 @@ def send_device_instruction(output_device):
     if output_device.user_status is not None:
         status = output_device.user_status
 
-    send_mqtt_message(
-        output_device.grow.id,
-        (output_device.pin, status)
+    publish.single(
+        f"grow/{output_device.grow_id}/output",
+        str((output_device.pin, status)),
+        hostname="mosquitto"
     )
 
 
@@ -93,12 +94,4 @@ def send_amqp_message(grow_id, message):
         'rabbitmq',
         'to_grow/' + str(grow_id),
         message=message
-    )
-
-
-def send_mqtt_message(grow_id, message):
-    logger.info(f'Sending MQTT {message} to grow {grow_id}')
-    # TODO: Get mosquitto hostname from env var or django setting
-    publish.single(
-        f"grow/{grow_id}/instruction", str(message), hostname="mosquitto"
     )
