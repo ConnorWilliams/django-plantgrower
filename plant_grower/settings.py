@@ -18,7 +18,7 @@ SECRET_KEY = 'secret-do-not-look!!'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.144', 'plantgrower', 'localhost', '127.0.0.1', '192.168.99.100'
+    '92.168.192.42', 'plantgrower', 'localhost', '127.0.0.1', '192.168.99.100'
 ]
 
 # Application definition
